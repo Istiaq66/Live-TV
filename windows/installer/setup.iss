@@ -1,4 +1,4 @@
-; Inno Setup script for World Cup Live TV (Windows).
+; Inno Setup script for Kickora (Windows).
 ; Packages the ENTIRE Flutter Release folder — the bare .exe will not run
 ; without the bundled mpv/media_kit DLLs and the data/ + flutter_assets dirs.
 ;
@@ -9,7 +9,7 @@
   #define AppVersion "1.0.0"
 #endif
 
-#define AppName "World Cup Live TV"
+#define AppName "Kickora"
 #define AppExeName "live_tv.exe"
 #define AppPublisher "Live TV"
 ; Release build output, relative to this .iss file (windows\installer\).
@@ -27,7 +27,7 @@ DisableProgramGroupPage=yes
 PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir=..\..\dist
-OutputBaseFilename=WorldCupLiveTV-Setup-{#AppVersion}
+OutputBaseFilename=Kickora-Setup-{#AppVersion}
 Compression=lzma2/max
 SolidCompression=yes
 WizardStyle=modern

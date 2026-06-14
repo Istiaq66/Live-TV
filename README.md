@@ -1,4 +1,4 @@
-# World Cup Live TV
+# Kickora
 
 Flutter live-TV / IPTV player for World Cup football and other channels.
 

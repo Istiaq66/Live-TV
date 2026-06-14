@@ -39,8 +39,8 @@ git push origin v1.0.0
 
 The tag triggers the workflow. When it finishes, the Release page has:
 
-- `WorldCupLiveTV-Setup-1.0.0.exe` — Windows installer
-- `WorldCupLiveTV-1.0.0.apk` — Android app
+- `Kickora-Setup-1.0.0.exe` — Windows installer
+- `Kickora-1.0.0.apk` — Android app
 
 `workflow_dispatch` (Actions tab → Run workflow) builds the same artifacts
 **without** publishing a Release — useful for testing.
@@ -75,5 +75,5 @@ flutter build apk --release
 # Windows installer (needs Inno Setup 6: https://jrsoftware.org/isdl.php)
 flutter build windows --release
 iscc /DAppVersion=1.0.0 windows\installer\setup.iss
-# → dist\WorldCupLiveTV-Setup-1.0.0.exe
+# → dist\Kickora-Setup-1.0.0.exe
 ```

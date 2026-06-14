@@ -126,8 +126,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: _buildBody(wide),
-      // Narrow layout: channel list lives in a drawer.
-      drawer: wide ? null : Drawer(child: _ChannelListSafe(child: _buildList())),
     );
   }
 
@@ -240,14 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     return ChannelTile(
                       channel: c,
                       selected: c == _current,
-                      onTap: () {
-                        _play(c);
-                        // Close drawer on narrow layouts after picking.
-                        if (Scaffold.of(context).hasDrawer &&
-                            Scaffold.of(context).isDrawerOpen) {
-                          Navigator.of(context).pop();
-                        }
-                      },
+                      onTap: () => _play(c),
                     );
                   },
                 ),
@@ -270,11 +261,4 @@ class AspectRatioBox extends StatelessWidget {
       child: AspectRatio(aspectRatio: 16 / 9, child: child),
     );
   }
-}
-
-class _ChannelListSafe extends StatelessWidget {
-  const _ChannelListSafe({required this.child});
-  final Widget child;
-  @override
-  Widget build(BuildContext context) => SafeArea(child: child);
 }

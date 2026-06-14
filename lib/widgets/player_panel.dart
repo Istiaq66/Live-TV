@@ -149,30 +149,33 @@ class _ErrorState extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.black87,
-      alignment: Alignment.center,
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(Icons.error_outline, color: Colors.orangeAccent, size: 56),
-          const SizedBox(height: 12),
-          const Text(
-            'Stream unavailable',
-            style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+      padding: const EdgeInsets.all(16),
+      child: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.error_outline, color: Colors.orangeAccent, size: 48),
+              const SizedBox(height: 10),
+              const Text(
+                'Stream unavailable',
+                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'This source may be offline or geo-blocked. Try another.',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white.withValues(alpha: 0.6)),
+              ),
+              const SizedBox(height: 14),
+              FilledButton.icon(
+                onPressed: onRetry,
+                icon: const Icon(Icons.refresh),
+                label: const Text('Retry'),
+              ),
+            ],
           ),
-          const SizedBox(height: 6),
-          Text(
-            'This source may be offline or geo-blocked. Try another.',
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.white.withValues(alpha: 0.6)),
-          ),
-          const SizedBox(height: 16),
-          FilledButton.icon(
-            onPressed: onRetry,
-            icon: const Icon(Icons.refresh),
-            label: const Text('Retry'),
-          ),
-        ],
+        ),
       ),
     );
   }

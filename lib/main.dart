@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart';
 
@@ -18,6 +19,9 @@ class LiveTvApp extends StatelessWidget {
     return MaterialApp(
       title: 'Kickora',
       debugShowCheckedModeBanner: false,
+      // Let mouse/trackpad drag scroll horizontal lists (filter chips) on
+      // desktop — Flutter disables mouse-drag scrolling by default there.
+      scrollBehavior: const _DragScrollBehavior(),
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xFF2E7D32), // pitch green
@@ -28,4 +32,18 @@ class LiveTvApp extends StatelessWidget {
       home: const HomeScreen(),
     );
   }
+}
+
+/// Enables drag-to-scroll for mouse and trackpad (in addition to touch/stylus),
+/// so the horizontal filter chip rows can be swiped on Windows/desktop.
+class _DragScrollBehavior extends MaterialScrollBehavior {
+  const _DragScrollBehavior();
+
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        PointerDeviceKind.trackpad,
+        PointerDeviceKind.stylus,
+      };
 }

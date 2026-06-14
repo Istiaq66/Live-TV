@@ -16,14 +16,18 @@ class M3uParser {
     final channels = <Channel>[];
 
     String? pendingTitle;
+    String? pendingGroupTitle; // from the EXTINF group-title="..." attribute
     for (final raw in lines) {
       final line = raw.trim();
       if (line.isEmpty) continue;
 
       if (line.startsWith('#EXTINF')) {
-        // Title is everything after the first comma.
+        // Title is everything after the first comma (attrs never contain one).
         final comma = line.indexOf(',');
         pendingTitle = comma == -1 ? line : line.substring(comma + 1).trim();
+        // Capture the playlist-declared category, if any.
+        final attrs = comma == -1 ? line : line.substring(0, comma);
+        pendingGroupTitle = _groupTitleRegex.firstMatch(attrs)?.group(1)?.trim();
       } else if (line.startsWith('#')) {
         // Other directive (#EXTM3U, #EXTGRP, etc.) — ignore.
         continue;
@@ -31,16 +35,19 @@ class M3uParser {
         // A URL line. Pair it with the pending title (or derive a fallback).
         final title = pendingTitle ?? _hostOf(line);
         final (cleanName, flag) = _splitFlag(title);
+        // Trust the playlist's own group-title when present; else infer.
+        final category = _mapGroupTitle(pendingGroupTitle) ?? _inferCategory(cleanName);
         channels.add(
           Channel(
             name: cleanName,
             url: line,
-            category: _inferCategory(cleanName),
+            category: category,
             group: _inferGroup(cleanName),
             flag: flag,
           ),
         );
         pendingTitle = null;
+        pendingGroupTitle = null;
       }
     }
     return channels;
@@ -55,6 +62,24 @@ class M3uParser {
       return (name.isEmpty ? title : name, flag);
     }
     return (title, null);
+  }
+
+  // Pulls the value out of a group-title="..." attribute.
+  static final RegExp _groupTitleRegex = RegExp(r'group-title="([^"]*)"');
+
+  /// Folds a playlist's free-form group-title into one of the app's top-level
+  /// categories. Returns null for empty/unknown so the caller can keyword-infer.
+  static String? _mapGroupTitle(String? raw) {
+    if (raw == null || raw.isEmpty) return null;
+    final g = raw.toUpperCase();
+    if (g.contains('NEWS')) return 'News';
+    if (g.contains('MOVIE') || g.contains('CINEMA') || g.contains('FILM')) return 'Movies';
+    if (g.contains('KID') || g.contains('CARTOON') || g.contains('CHILD')) return 'Kids';
+    if (g.contains('MUSIC')) return 'Music';
+    if (g.contains('SPORT')) return 'Sports';
+    if (g == 'UNDEFINED' || g == 'OTHER') return null; // fall back to inference
+    // Entertainment, General, Family, Culture, Documentary, Religious, etc.
+    return 'Entertainment';
   }
 
   static String _hostOf(String url) {

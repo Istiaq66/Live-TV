@@ -9,13 +9,17 @@ class ChannelTile extends StatelessWidget {
     required this.channel,
     required this.selected,
     required this.status,
+    required this.isFavorite,
     required this.onTap,
+    required this.onToggleFavorite,
   });
 
   final Channel channel;
   final bool selected;
   final StreamStatus status;
+  final bool isFavorite;
   final VoidCallback onTap;
+  final VoidCallback onToggleFavorite;
 
   @override
   Widget build(BuildContext context) {
@@ -48,10 +52,18 @@ class ChannelTile extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           _StatusDot(status: status),
-          if (selected) ...[
-            const SizedBox(width: 4),
+          IconButton(
+            visualDensity: VisualDensity.compact,
+            tooltip: isFavorite ? 'Remove favorite' : 'Add favorite',
+            icon: Icon(
+              isFavorite ? Icons.star : Icons.star_border,
+              color: isFavorite ? Colors.amber : theme.hintColor,
+              size: 20,
+            ),
+            onPressed: onToggleFavorite,
+          ),
+          if (selected)
             Icon(Icons.play_arrow, color: theme.colorScheme.primary),
-          ],
         ],
       ),
       onTap: onTap,

@@ -4,6 +4,7 @@ name: Build & Release
 # artifacts and publish a GitHub Release. Manual runs build artifacts only.
 on:
   push:
+    branches: [master]
     tags:
       - "v*"
   workflow_dispatch:
@@ -27,10 +28,14 @@ jobs:
         shell: bash
         run: |
           if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
-            echo "version=${GITHUB_REF#refs/tags/v}" >> "$GITHUB_OUTPUT"
+            ver="${GITHUB_REF#refs/tags/v}"           # tagged release
+          elif [[ -n "${{ github.event.inputs.version }}" ]]; then
+            ver="${{ github.event.inputs.version }}"  # manual dispatch
           else
-            echo "version=${{ github.event.inputs.version }}" >> "$GITHUB_OUTPUT"
+            ver="0.0.0-dev-${GITHUB_SHA::7}"          # branch push (main/dev)
           fi
+          echo "version=$ver" >> "$GITHUB_OUTPUT"
+          echo "Resolved version: $ver"
 
   # ---------------------------------------------------------------- Android
   android:

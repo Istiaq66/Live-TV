@@ -4,6 +4,7 @@ import 'package:media_kit_video/media_kit_video.dart';
 
 import '../models/channel.dart';
 import '../services/playlist_repository.dart';
+import '../services/preferences_service.dart';
 import '../services/stream_health.dart';
 import '../widgets/channel_tile.dart';
 import '../widgets/player_panel.dart';
@@ -22,10 +23,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final PlaylistRepository _repo = const PlaylistRepository();
   final StreamHealthChecker _checker = StreamHealthChecker();
+  PreferencesService? _prefs;
 
   List<Channel> _all = [];
   bool _loading = true;
   String? _loadError;
+
+  // Persisted: favorite stream URLs.
+  Set<String> _favorites = {};
+
+  static const String _favCategory = '★ Favorites';
 
   // Health-check state, keyed by stream URL so it survives filter changes.
   final Map<String, StreamStatus> _status = {};
@@ -51,12 +58,27 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _load() async {
     try {
-      final channels = await _repo.loadChannels();
+      final results = await Future.wait([
+        _repo.loadChannels(),
+        PreferencesService.create(),
+      ]);
       if (!mounted) return;
+      final channels = results[0] as List<Channel>;
+      final prefs = results[1] as PreferencesService;
+
       setState(() {
         _all = channels;
+        _prefs = prefs;
+        _favorites = prefs.favorites();
         _loading = false;
       });
+
+      // Resume the last-watched channel (auto-skip recovers if it's now dead).
+      final lastUrl = prefs.lastWatched();
+      if (lastUrl != null) {
+        final match = channels.where((c) => c.url == lastUrl);
+        if (match.isNotEmpty) _play(match.first);
+      }
     } catch (e) {
       if (!mounted) return;
       setState(() {
@@ -64,6 +86,13 @@ class _HomeScreenState extends State<HomeScreen> {
         _loading = false;
       });
     }
+  }
+
+  void _toggleFavorite(Channel c) {
+    setState(() {
+      if (!_favorites.add(c.url)) _favorites.remove(c.url);
+    });
+    _prefs?.saveFavorites(_favorites);
   }
 
   @override
@@ -81,14 +110,18 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
     final extras = set.where((c) => !order.contains(c)).toList()..sort();
     final ordered = [...order.where(set.contains), ...extras];
-    return ['All', ...ordered];
+    return ['All', if (_favorites.isNotEmpty) _favCategory, ...ordered];
   }
+
+  bool _inCategory(Channel c) => _category == _favCategory
+      ? _favorites.contains(c.url)
+      : _category == 'All' || c.category == _category;
 
   /// Broadcaster groups available within the currently selected category.
   List<String> get _groups {
     final set = <String>{
       for (final c in _all)
-        if (_category == 'All' || c.category == _category) c.group,
+        if (_inCategory(c)) c.group,
     };
     final list = set.toList()..sort();
     return ['All', ...list];
@@ -97,12 +130,11 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Channel> get _filtered {
     final q = _query.trim().toLowerCase();
     return _all.where((c) {
-      final matchCategory = _category == 'All' || c.category == _category;
       final matchGroup = _group == 'All' || c.group == _group;
       final matchQuery = q.isEmpty || c.name.toLowerCase().contains(q);
       final matchOnline =
           !_onlineOnly || _status[c.url] == StreamStatus.online;
-      return matchCategory && matchGroup && matchQuery && matchOnline;
+      return _inCategory(c) && matchGroup && matchQuery && matchOnline;
     }).toList();
   }
 
@@ -114,10 +146,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final q = _query.trim().toLowerCase();
     final urls = _all
         .where((c) {
-          final mc = _category == 'All' || c.category == _category;
           final mg = _group == 'All' || c.group == _group;
           final mq = q.isEmpty || c.name.toLowerCase().contains(q);
-          return mc && mg && mq;
+          return _inCategory(c) && mg && mq;
         })
         .map((c) => c.url)
         .toList();
@@ -153,6 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() => _current = channel);
     // Low-latency live tuning; mpv handles HLS + raw mpegts transparently.
     _player.open(Media(channel.url));
+    _prefs?.saveLastWatched(channel.url);
   }
 
   void _retry() {
@@ -394,7 +426,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       channel: c,
                       selected: c == _current,
                       status: _status[c.url] ?? StreamStatus.unknown,
+                      isFavorite: _favorites.contains(c.url),
                       onTap: () => _play(c),
+                      onToggleFavorite: () => _toggleFavorite(c),
                     );
                   },
                 ),

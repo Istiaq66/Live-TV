@@ -50,8 +50,12 @@ The tag triggers the workflow. When it finishes, the Release page has:
 **Windows:** download the `-Setup-.exe`, run it, click through. Installs to
 Program Files + Start-menu/desktop shortcut. Uninstall via Add/Remove Programs.
 
-**Android:** download the `.apk`, open it, allow "Install unknown apps" for the
-browser/file manager once, then install.
+**Android:** two APKs are published (split per CPU to keep size ~16MB instead
+of a 48MB universal build):
+- `Kickora-x-arm64-v8a.apk` — **almost all phones from ~2017 on** (pick this)
+- `Kickora-x-armeabi-v7a.apk` — older 32-bit devices only
+
+Download one, open it, allow "Install unknown apps" once, then install.
 
 ## Why no Microsoft Store?
 
@@ -70,7 +74,9 @@ instant reputation); wire `signtool` into the `windows` job if you buy one.
 
 ```bash
 # Android (needs android/key.properties + keystore present locally)
-flutter build apk --release
+flutter build apk --release --split-per-abi \
+  --target-platform android-arm64,android-arm \
+  --obfuscate --split-debug-info=build/symbols
 
 # Windows installer (needs Inno Setup 6: https://jrsoftware.org/isdl.php)
 flutter build windows --release

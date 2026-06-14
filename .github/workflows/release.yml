@@ -87,14 +87,22 @@ jobs:
 
       - run: flutter pub get
 
-      - name: Build release APK
-        run: flutter build apk --release --build-name=${{ needs.version.outputs.version }}
+      # Split per ABI (~16MB each) instead of a 48MB universal APK. Obfuscate +
+      # strip Dart symbols for a bit more savings. We ship arm64 (modern phones)
+      # and armeabi-v7a (older 32-bit); x86/x86_64 are emulator-only, dropped.
+      - name: Build release APKs (per ABI)
+        run: |
+          flutter build apk --release --split-per-abi \
+            --target-platform android-arm64,android-arm \
+            --obfuscate --split-debug-info=build/symbols \
+            --build-name=${{ needs.version.outputs.version }}
 
-      - name: Rename APK
+      - name: Collect APKs
         run: |
           mkdir -p dist
-          cp build/app/outputs/flutter-apk/app-release.apk \
-             dist/Kickora-${{ needs.version.outputs.version }}.apk
+          V=${{ needs.version.outputs.version }}
+          cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk   "dist/Kickora-$V-arm64-v8a.apk"
+          cp build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk "dist/Kickora-$V-armeabi-v7a.apk"
 
       - uses: actions/upload-artifact@v4
         with:

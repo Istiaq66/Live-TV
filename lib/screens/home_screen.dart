@@ -18,7 +18,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   // media_kit player + render controller. Created once, reused for every zap.
-  late final Player _player = Player();
+  // Bigger demuxer buffer absorbs jitter on high-latency / overseas links so
+  // playback rebuffers less often (trades a slightly longer initial load).
+  late final Player _player = Player(
+    configuration: const PlayerConfiguration(bufferSize: 64 * 1024 * 1024),
+  );
   late final VideoController _controller = VideoController(_player);
 
   final PlaylistRepository _repo = const PlaylistRepository();
@@ -53,7 +57,20 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    _tunePlayer();
     _load();
+  }
+
+  /// Tune libmpv for laggy live streams: read further ahead and keep a deeper
+  /// cache so transient network jitter doesn't stall playback, and don't wait
+  /// forever on a dead host.
+  Future<void> _tunePlayer() async {
+    final p = _player.platform;
+    if (p is! NativePlayer) return;
+    await p.setProperty('cache', 'yes');
+    await p.setProperty('demuxer-readahead-secs', '30');
+    await p.setProperty('cache-secs', '30');
+    await p.setProperty('network-timeout', '15');
   }
 
   Future<void> _load() async {

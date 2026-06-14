@@ -36,7 +36,9 @@ class _PlayerPanelState extends State<PlayerPanel> {
   Timer? _watchdog; // fires if a source buffers forever without erroring
   final List<StreamSubscription> _subs = [];
 
-  static const Duration _stallTimeout = Duration(seconds: 12);
+  // Higher latency / out-of-region links need longer to fill the buffer before
+  // we declare them dead and auto-skip.
+  static const Duration _stallTimeout = Duration(seconds: 25);
 
   @override
   void initState() {

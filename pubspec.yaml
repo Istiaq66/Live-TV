@@ -41,6 +41,12 @@ dependencies:
   media_kit_video: ^1.2.5
   media_kit_libs_video: ^1.0.5
 
+  # Lightweight HTTP probes for stream health-checking.
+  http: ^1.2.2
+
+  # Persist favorites + last-watched across launches.
+  shared_preferences: ^2.3.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

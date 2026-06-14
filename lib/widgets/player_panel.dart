@@ -14,12 +14,16 @@ class PlayerPanel extends StatefulWidget {
     required this.controller,
     required this.channel,
     required this.onRetry,
+    this.onError,
   });
 
   final Player player;
   final VideoController controller;
   final Channel? channel;
   final VoidCallback onRetry;
+
+  /// Fired once per channel when playback errors — lets the parent auto-skip.
+  final VoidCallback? onError;
 
   @override
   State<PlayerPanel> createState() => _PlayerPanelState();
@@ -28,34 +32,69 @@ class PlayerPanel extends StatefulWidget {
 class _PlayerPanelState extends State<PlayerPanel> {
   bool _buffering = false;
   String? _error;
+  bool _reported = false; // guard: report each failure once per channel
+  Timer? _watchdog; // fires if a source buffers forever without erroring
   final List<StreamSubscription> _subs = [];
+
+  static const Duration _stallTimeout = Duration(seconds: 12);
 
   @override
   void initState() {
     super.initState();
     _subs.add(widget.player.stream.buffering.listen((b) {
-      if (mounted) setState(() => _buffering = b);
+      if (!mounted) return;
+      setState(() => _buffering = b);
+      if (b) {
+        _startWatchdog();
+      } else {
+        _watchdog?.cancel();
+      }
     }));
     _subs.add(widget.player.stream.error.listen((e) {
-      if (mounted) setState(() => _error = e);
+      if (!mounted) return;
+      setState(() => _error = e);
+      _fail();
     }));
-    // Clear stale error once playback actually starts.
+    // Playback started → cancel watchdog + clear any stale error.
     _subs.add(widget.player.stream.playing.listen((p) {
-      if (p && mounted && _error != null) setState(() => _error = null);
+      if (!p) return;
+      _watchdog?.cancel();
+      if (mounted && _error != null) setState(() => _error = null);
     }));
+  }
+
+  void _startWatchdog() {
+    _watchdog?.cancel();
+    _watchdog = Timer(_stallTimeout, () {
+      if (!mounted) return;
+      if (!widget.player.state.playing) {
+        setState(() => _error ??= 'Stream timed out');
+        _fail();
+      }
+    });
+  }
+
+  /// Report the failure to the parent exactly once for this channel.
+  void _fail() {
+    if (_reported) return;
+    _reported = true;
+    widget.onError?.call();
   }
 
   @override
   void didUpdateWidget(PlayerPanel old) {
     super.didUpdateWidget(old);
-    // New channel selected → drop the previous error banner.
-    if (old.channel?.url != widget.channel?.url && _error != null) {
-      setState(() => _error = null);
+    // New channel selected → drop the previous error banner + re-arm reporting.
+    if (old.channel?.url != widget.channel?.url) {
+      _reported = false;
+      _watchdog?.cancel();
+      if (_error != null) setState(() => _error = null);
     }
   }
 
   @override
   void dispose() {
+    _watchdog?.cancel();
     for (final s in _subs) {
       s.cancel();
     }

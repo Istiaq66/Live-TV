@@ -4,6 +4,7 @@ import 'package:media_kit_video/media_kit_video.dart';
 
 import '../models/channel.dart';
 import '../services/playlist_repository.dart';
+import '../services/stream_health.dart';
 import '../widgets/channel_tile.dart';
 import '../widgets/player_panel.dart';
 
@@ -20,15 +21,27 @@ class _HomeScreenState extends State<HomeScreen> {
   late final VideoController _controller = VideoController(_player);
 
   final PlaylistRepository _repo = const PlaylistRepository();
+  final StreamHealthChecker _checker = StreamHealthChecker();
 
   List<Channel> _all = [];
   bool _loading = true;
   String? _loadError;
 
+  // Health-check state, keyed by stream URL so it survives filter changes.
+  final Map<String, StreamStatus> _status = {};
+  bool _checking = false;
+
   Channel? _current;
   String _query = '';
   String _category = 'All';
   String _group = 'All';
+  bool _onlineOnly = false;
+
+  // Auto-skip bookkeeping: sources already attempted in the current tune, and a
+  // cap so a run of dead links can't cascade endlessly.
+  final Set<String> _tried = {};
+  int _autoSkips = 0;
+  static const int _maxAutoSkips = 6;
 
   @override
   void initState() {
@@ -87,11 +100,56 @@ class _HomeScreenState extends State<HomeScreen> {
       final matchCategory = _category == 'All' || c.category == _category;
       final matchGroup = _group == 'All' || c.group == _group;
       final matchQuery = q.isEmpty || c.name.toLowerCase().contains(q);
-      return matchCategory && matchGroup && matchQuery;
+      final matchOnline =
+          !_onlineOnly || _status[c.url] == StreamStatus.online;
+      return matchCategory && matchGroup && matchQuery && matchOnline;
     }).toList();
   }
 
-  void _play(Channel channel) {
+  /// Probes every channel currently passing the category/group/search filters.
+  Future<void> _checkVisible() async {
+    if (_checking) return;
+    // Snapshot the URLs to check against the *non*-online filter, so enabling
+    // "online only" mid-check doesn't shrink the set out from under us.
+    final q = _query.trim().toLowerCase();
+    final urls = _all
+        .where((c) {
+          final mc = _category == 'All' || c.category == _category;
+          final mg = _group == 'All' || c.group == _group;
+          final mq = q.isEmpty || c.name.toLowerCase().contains(q);
+          return mc && mg && mq;
+        })
+        .map((c) => c.url)
+        .toList();
+    if (urls.isEmpty) return;
+
+    setState(() {
+      _checking = true;
+      for (final u in urls) {
+        _status[u] = StreamStatus.checking;
+      }
+    });
+
+    await _checker.checkAll(
+      urls,
+      onResult: (url, alive) {
+        if (!mounted) return;
+        setState(() {
+          _status[url] = alive ? StreamStatus.online : StreamStatus.offline;
+        });
+      },
+    );
+
+    if (mounted) setState(() => _checking = false);
+  }
+
+  void _play(Channel channel, {bool userInitiated = true}) {
+    if (userInitiated) {
+      // Fresh user pick → reset the auto-skip session.
+      _tried.clear();
+      _autoSkips = 0;
+    }
+    _tried.add(channel.url);
     setState(() => _current = channel);
     // Low-latency live tuning; mpv handles HLS + raw mpegts transparently.
     _player.open(Media(channel.url));
@@ -100,6 +158,80 @@ class _HomeScreenState extends State<HomeScreen> {
   void _retry() {
     final c = _current;
     if (c != null) _player.open(Media(c.url));
+  }
+
+  /// Called when the player reports a playback error: mark the source offline
+  /// and hop to the next viable source for the same channel / group.
+  void _onStreamError() {
+    final failed = _current;
+    if (failed == null) return;
+    if (_status[failed.url] != StreamStatus.offline) {
+      setState(() => _status[failed.url] = StreamStatus.offline);
+    }
+
+    if (_autoSkips >= _maxAutoSkips) {
+      _toast('No working source found. Try Health-check (top-right).');
+      return;
+    }
+
+    final next = _nextSource(failed);
+    if (next == null) {
+      _toast('“${failed.name}” is down — no other source available.');
+      return;
+    }
+    _autoSkips++;
+    _toast('“${failed.name}” down — trying another source…');
+    _play(next, userInitiated: false);
+  }
+
+  /// Best alternative for a failed channel: same base name first, then same
+  /// broadcaster group; known-online preferred, never a tried/offline one.
+  Channel? _nextSource(Channel failed) {
+    bool viable(Channel c) =>
+        !_tried.contains(c.url) && _status[c.url] != StreamStatus.offline;
+
+    final key = _baseKey(failed);
+    final pool = <Channel>[];
+    final seen = <String>{};
+    void add(Iterable<Channel> cs) {
+      for (final c in cs) {
+        if (viable(c) && seen.add(c.url)) pool.add(c);
+      }
+    }
+
+    add(_all.where((c) => _baseKey(c) == key)); // same channel, other servers
+    add(_all.where((c) => c.group == failed.group)); // same broadcaster group
+    if (pool.isEmpty) return null;
+
+    // online (0) before unknown (1).
+    int rank(Channel c) => _status[c.url] == StreamStatus.online ? 0 : 1;
+    pool.sort((a, b) => rank(a).compareTo(rank(b)));
+    return pool.first;
+  }
+
+  /// Normalises a channel name so duplicates across providers collapse:
+  /// "ESPN 2", "ESPN 2 HD", "ESPN 2 720p" → "espn 2".
+  static String _baseKey(Channel c) {
+    const noise = {
+      'hd', 'fhd', 'uhd', 'sd', '4k', '720p', '1080p', '480p', '576p',
+      'alt', 'playlist', 'internacional', 'live', 'tv',
+    };
+    final cleaned = c.name
+        .toLowerCase()
+        .replaceAll(RegExp(r'[^a-z0-9+ ]'), ' ');
+    final tokens = cleaned
+        .split(RegExp(r'\s+'))
+        .where((t) => t.isNotEmpty && !noise.contains(t));
+    return tokens.join(' ').trim();
+  }
+
+  void _toast(String msg) {
+    if (!mounted) return;
+    final m = ScaffoldMessenger.of(context);
+    m.clearSnackBars();
+    m.showSnackBar(
+      SnackBar(content: Text(msg), duration: const Duration(seconds: 2)),
+    );
   }
 
   @override
@@ -116,16 +248,35 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         actions: [
-          if (!_loading && _loadError == null)
+          if (!_loading && _loadError == null) ...[
+            IconButton(
+              tooltip: 'Show online only',
+              isSelected: _onlineOnly,
+              icon: const Icon(Icons.wifi_tethering_off),
+              selectedIcon: const Icon(Icons.wifi_tethering),
+              onPressed: () => setState(() => _onlineOnly = !_onlineOnly),
+            ),
+            IconButton(
+              tooltip: 'Health-check visible channels',
+              icon: _checking
+                  ? const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.network_check),
+              onPressed: _checking ? null : _checkVisible,
+            ),
             Padding(
-              padding: const EdgeInsets.only(right: 16),
+              padding: const EdgeInsets.only(right: 12, left: 4),
               child: Center(
                 child: Text(
-                  '${_all.length} channels',
+                  '${_filtered.length}/${_all.length}',
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
             ),
+          ],
         ],
       ),
       body: _buildBody(wide),
@@ -145,6 +296,7 @@ class _HomeScreenState extends State<HomeScreen> {
       controller: _controller,
       channel: _current,
       onRetry: _retry,
+      onError: _onStreamError,
     );
 
     if (wide) {
@@ -241,6 +393,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     return ChannelTile(
                       channel: c,
                       selected: c == _current,
+                      status: _status[c.url] ?? StreamStatus.unknown,
                       onTap: () => _play(c),
                     );
                   },

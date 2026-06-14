@@ -19,8 +19,9 @@ if (hasReleaseKeystore) {
 
 android {
     namespace = "com.example.live_tv"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    // media_kit + plugins require SDK 36 / NDK 27 (backward compatible).
+    compileSdk = 36
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

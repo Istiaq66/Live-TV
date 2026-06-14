@@ -62,7 +62,10 @@ class _HomeScreenState extends State<HomeScreen> {
   /// Top-level categories, ordered with Sports first (the main use case).
   List<String> get _categories {
     final set = <String>{for (final c in _all) c.category};
-    const order = ['Sports', 'News', 'Movies', 'Entertainment', 'Music', 'Kids'];
+    const order = [
+      'Sports', 'News', 'Movies', 'Entertainment', 'Music', 'Kids',
+      'Test (always-on)',
+    ];
     final extras = set.where((c) => !order.contains(c)).toList()..sort();
     final ordered = [...order.where(set.contains), ...extras];
     return ['All', ...ordered];

@@ -474,3 +474,11 @@ https://amg01006-toongoggles-toongoggles-cineverse-cb5pi.amagi.tv/playlist.m3u8
 https://stingray-hits-1-us.tablo.wurl.tv/playlist.m3u8
 #EXTINF:-1 ,Vevo Pop Music 🎵
 https://vevo-jp-vevopop.amagi.tv/playlist.m3u8
+#EXTINF:-1 ,TEST — Big Buck Bunny (HLS)
+https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8
+#EXTINF:-1 ,TEST — Apple BipBop Sample (HLS)
+https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8
+#EXTINF:-1 ,TEST — Tears of Steel (HLS)
+https://test-streams.mux.dev/tos_ismc/main.m3u8
+#EXTINF:-1 ,TEST — Akamai Live Demo (HLS)
+https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8

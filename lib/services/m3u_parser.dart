@@ -93,6 +93,7 @@ class M3uParser {
   // Genre keywords. Checked before defaulting to Sports — keep these specific
   // so sports channels don't get mislabelled.
   static const Map<String, List<String>> _categoryKeywords = {
+    'Test (always-on)': ['TEST', 'BIG BUCK', 'SAMPLE', 'DEMO', 'TEARS OF'],
     'News': [
       'NEWS', 'NOTICIAS', 'AL JAZEERA', 'ALJAZEERA', ' DW', 'FRANCE 24',
       'FRANCE24', 'EURONEWS', 'CGTN', 'TRT WORLD', 'CNN', 'BBC NEWS',

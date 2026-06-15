@@ -581,6 +581,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final wide = MediaQuery.sizeOf(context).width >= 900;
+    // Compute the filtered list once per build; both the AppBar count and the
+    // channel list consume it (the getter scans all channels, so don't run it
+    // twice per frame).
+    final filtered =
+        (!_loading && _loadError == null) ? _filtered : const <Channel>[];
 
     return Scaffold(
       drawer: _buildDrawer(),
@@ -616,7 +621,7 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.only(right: 12, left: 4),
               child: Center(
                 child: Text(
-                  '${_filtered.length}/${_all.length}',
+                  '${filtered.length}/${_all.length}',
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
@@ -624,11 +629,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ],
       ),
-      body: _buildBody(wide),
+      body: _buildBody(wide, filtered),
     );
   }
 
-  Widget _buildBody(bool wide) {
+  Widget _buildBody(bool wide, List<Channel> filtered) {
     if (_loading) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -654,7 +659,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (wide) {
       return Row(
         children: [
-          SizedBox(width: 340, child: _buildList()),
+          SizedBox(width: 340, child: _buildList(filtered)),
           const VerticalDivider(width: 1),
           Expanded(
             child: Column(
@@ -671,13 +676,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       children: [
         AspectRatio(aspectRatio: 16 / 9, child: player),
-        Expanded(child: _buildList()),
+        Expanded(child: _buildList(filtered)),
       ],
     );
   }
 
-  Widget _buildList() {
-    final filtered = _filtered;
+  Widget _buildList(List<Channel> filtered) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [

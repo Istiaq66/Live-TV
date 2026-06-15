@@ -1,11 +1,11 @@
 {
-    "name": "live_tv",
-    "short_name": "live_tv",
+    "name": "Drishto",
+    "short_name": "Drishto",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#1B5E20",
+    "theme_color": "#1B5E20",
+    "description": "Free live TV: news, movies, sports, music, kids and more.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

@@ -36,6 +36,11 @@ class _PlayerPanelState extends State<PlayerPanel> {
   Timer? _watchdog; // fires if a source buffers forever without erroring
   final List<StreamSubscription> _subs = [];
 
+  // Resolution picker: available HLS variant video tracks + the active one.
+  // `VideoTrack.auto()` lets mpv adapt bitrate to bandwidth (the default).
+  List<VideoTrack> _videoTracks = const [];
+  VideoTrack? _activeVideo;
+
   // Out-of-region links need some slack to fill the buffer, but with the
   // shorter readahead a live source should start well inside this window —
   // past it, treat the source as dead and auto-skip.
@@ -64,6 +69,33 @@ class _PlayerPanelState extends State<PlayerPanel> {
       _watchdog?.cancel();
       if (mounted && _error != null) setState(() => _error = null);
     }));
+    // Resolution variants exposed by the current source.
+    _subs.add(widget.player.stream.tracks.listen((t) {
+      if (!mounted) return;
+      // Drop the synthetic "auto"/"no" entries; we add Auto ourselves.
+      final real = t.video
+          .where((v) => v.id != 'auto' && v.id != 'no')
+          .toList();
+      setState(() => _videoTracks = real);
+    }));
+    _subs.add(widget.player.stream.track.listen((t) {
+      if (!mounted) return;
+      setState(() => _activeVideo = t.video);
+    }));
+  }
+
+  /// Human label for a variant: prefer height (e.g. "720p"), else its title/id.
+  String _trackLabel(VideoTrack t) {
+    final h = t.h;
+    if (h != null && h > 0) return '${h}p';
+    final title = t.title;
+    if (title != null && title.trim().isNotEmpty) return title.trim();
+    return 'Track ${t.id}';
+  }
+
+  void _selectTrack(VideoTrack t) {
+    widget.player.setVideoTrack(t);
+    setState(() => _activeVideo = t);
   }
 
   void _startWatchdog() {
@@ -91,7 +123,11 @@ class _PlayerPanelState extends State<PlayerPanel> {
     if (old.channel?.url != widget.channel?.url) {
       _reported = false;
       _watchdog?.cancel();
-      if (_error != null) setState(() => _error = null);
+      setState(() {
+        _error = null;
+        _videoTracks = const []; // variants repopulate for the new source
+        _activeVideo = null;
+      });
     }
   }
 
@@ -129,7 +165,92 @@ class _PlayerPanelState extends State<PlayerPanel> {
               top: 12,
               child: _NowPlayingBadge(channel: widget.channel!),
             ),
+
+          if (widget.channel != null && _videoTracks.isNotEmpty)
+            Positioned(
+              right: 12,
+              top: 12,
+              child: _QualityMenu(
+                tracks: _videoTracks,
+                active: _activeVideo,
+                labelOf: _trackLabel,
+                onAuto: () => _selectTrack(VideoTrack.auto()),
+                onPick: _selectTrack,
+              ),
+            ),
         ],
+      ),
+    );
+  }
+}
+
+/// Resolution selector: "Auto" plus each HLS variant the source exposes.
+class _QualityMenu extends StatelessWidget {
+  const _QualityMenu({
+    required this.tracks,
+    required this.active,
+    required this.labelOf,
+    required this.onAuto,
+    required this.onPick,
+  });
+
+  final List<VideoTrack> tracks;
+  final VideoTrack? active;
+  final String Function(VideoTrack) labelOf;
+  final VoidCallback onAuto;
+  final ValueChanged<VideoTrack> onPick;
+
+  bool get _isAuto => active == null || active!.id == 'auto';
+
+  String get _currentLabel {
+    final a = active;
+    if (a == null || a.id == 'auto') return 'Auto';
+    return labelOf(a);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton<String>(
+      tooltip: 'Quality',
+      color: Colors.black87,
+      onSelected: (id) {
+        if (id == 'auto') {
+          onAuto();
+        } else {
+          final t = tracks.where((v) => v.id == id);
+          if (t.isNotEmpty) onPick(t.first);
+        }
+      },
+      itemBuilder: (_) => [
+        CheckedPopupMenuItem<String>(
+          value: 'auto',
+          checked: _isAuto,
+          child: const Text('Auto', style: TextStyle(color: Colors.white)),
+        ),
+        for (final t in tracks)
+          CheckedPopupMenuItem<String>(
+            value: t.id,
+            checked: !_isAuto && active!.id == t.id,
+            child: Text(labelOf(t), style: const TextStyle(color: Colors.white)),
+          ),
+      ],
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        decoration: BoxDecoration(
+          color: Colors.black54,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.hd, color: Colors.white, size: 16),
+            const SizedBox(width: 6),
+            Text(
+              _currentLabel,
+              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
       ),
     );
   }

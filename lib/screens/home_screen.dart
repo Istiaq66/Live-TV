@@ -3,6 +3,8 @@ import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 
 import '../models/channel.dart';
+import '../models/fixture.dart';
+import '../services/fixtures_service.dart';
 import '../services/playlist_repository.dart';
 import '../services/preferences_service.dart';
 import '../services/stream_health.dart';
@@ -27,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final PlaylistRepository _repo = const PlaylistRepository();
   final StreamHealthChecker _checker = StreamHealthChecker();
+  final FixturesService _fixtures = FixturesService();
   PreferencesService? _prefs;
 
   List<Channel> _all = [];
@@ -277,6 +280,96 @@ class _HomeScreenState extends State<HomeScreen> {
     return tokens.join(' ').trim();
   }
 
+  /// Bottom sheet listing today's football matches (TheSportsDB). Tapping a
+  /// match jumps to the Sports category so the user can pick the broadcaster.
+  void _showFixtures() {
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (sheetCtx) {
+        return DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.7,
+          maxChildSize: 0.95,
+          builder: (_, scrollController) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(16, 4, 16, 12),
+                  child: Row(
+                    children: [
+                      Icon(Icons.sports_soccer),
+                      SizedBox(width: 8),
+                      Text(
+                        "Today's Football",
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: FutureBuilder<List<Fixture>>(
+                    future: _fixtures.todayFootball(),
+                    builder: (_, snap) {
+                      if (snap.connectionState != ConnectionState.done) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      if (snap.hasError) {
+                        return Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(24),
+                            child: Text(
+                              "Couldn't load fixtures.\n${snap.error}",
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        );
+                      }
+                      final list = snap.data ?? const [];
+                      if (list.isEmpty) {
+                        return const Center(child: Text('No football listed for today.'));
+                      }
+                      return ListView.separated(
+                        controller: scrollController,
+                        itemCount: list.length,
+                        separatorBuilder: (_, _) => const Divider(height: 1),
+                        itemBuilder: (_, i) {
+                          final f = list[i];
+                          return ListTile(
+                            leading: CircleAvatar(child: Text(f.whenLabel.split(':').first)),
+                            title: Text(f.title),
+                            subtitle: Text('${f.league} • ${f.whenLabel}'),
+                            trailing: const Icon(Icons.chevron_right),
+                            onTap: () {
+                              Navigator.of(sheetCtx).pop();
+                              _openMatch(f);
+                            },
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  /// Tap-through from a fixture: surface the Sports channels so the user can
+  /// choose the broadcaster airing it.
+  void _openMatch(Fixture f) {
+    setState(() {
+      _category = 'Sports';
+      _group = 'All';
+    });
+    _toast('Showing Sports channels for “${f.title}”. Pick a broadcaster.');
+  }
+
   void _toast(String msg) {
     if (!mounted) return;
     final m = ScaffoldMessenger.of(context);
@@ -301,6 +394,11 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: [
           if (!_loading && _loadError == null) ...[
+            IconButton(
+              tooltip: "Today's football",
+              icon: const Icon(Icons.calendar_today),
+              onPressed: _showFixtures,
+            ),
             IconButton(
               tooltip: 'Show online only',
               isSelected: _onlineOnly,

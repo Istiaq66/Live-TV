@@ -9,6 +9,7 @@ class Channel {
     required this.category,
     required this.group,
     this.flag,
+    this.headers = const {},
   });
 
   /// Display name (flag emoji stripped out into [flag]).
@@ -26,6 +27,10 @@ class Channel {
 
   /// Country flag emoji if present in the original title, else null.
   final String? flag;
+
+  /// Per-stream HTTP headers (User-Agent / Referer / Origin) parsed from the
+  /// playlist. Many origins return 403 without these; empty for most channels.
+  final Map<String, String> headers;
 
   /// Stable id for keys / favourites (url is unique per stream).
   String get id => url;

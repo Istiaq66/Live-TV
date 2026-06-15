@@ -15,7 +15,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         children: const [
           _H('Overview'),
-          _P('Kickora is a free live-TV aggregator. It does not require an '
+          _P('Drishto is a free live-TV aggregator. It does not require an '
               'account and does not collect, store, or transmit any personal '
               'information to its developer.'),
           _H('Data stored on your device'),
@@ -24,11 +24,11 @@ class PrivacyPolicyScreen extends StatelessWidget {
               'This data never leaves your device and is removed when you '
               'uninstall the app.'),
           _H('Third-party streams'),
-          _P('Channels play from third-party stream URLs that Kickora does not '
+          _P('Channels play from third-party stream URLs that Drishto does not '
               'own, host, or control. When you play a channel, your device '
               'connects directly to that provider, which may receive your IP '
               'address and standard connection details under its own privacy '
-              'policy. Kickora is not responsible for third-party content or '
+              'policy. Drishto is not responsible for third-party content or '
               'their data practices.'),
           _H('Match fixtures'),
           _P('Today\'s football fixtures are fetched from TheSportsDB '
@@ -37,7 +37,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
           _H('Analytics & ads'),
           _P('The app contains no advertising and no analytics or tracking SDKs.'),
           _H('Children'),
-          _P('Kickora is not directed at children and collects no data from '
+          _P('Drishto is not directed at children and collects no data from '
               'anyone.'),
           _H('Changes'),
           _P('This policy may be updated as the app evolves. Continued use '

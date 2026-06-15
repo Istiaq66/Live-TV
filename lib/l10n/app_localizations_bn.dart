@@ -9,10 +9,10 @@ class AppLocalizationsBn extends AppLocalizations {
   AppLocalizationsBn([String locale = 'bn']) : super(locale);
 
   @override
-  String get appName => 'Kickora';
+  String get appName => 'Drishto';
 
   @override
-  String get appTagline => 'লাইভ খেলা ও টিভি';
+  String get appTagline => 'লাইভ টিভি ও খেলা';
 
   @override
   String get showOnlineOnly => 'শুধু অনলাইন দেখান';
@@ -56,11 +56,11 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get aboutBody1 =>
-      'Kickora একটি ফ্রি লাইভ-টিভি ও খেলার অ্যাপ, তৈরি করেছেন স্বাধীন ফ্লাটার ডেভেলপার ইস্তিয়াক আহমেদ।';
+      'Drishto একটি ফ্রি লাইভ-টিভি অ্যাপ — খবর, সিনেমা, বিনোদন, গান, শিশুতোষ, খেলা ও আরও অনেক কিছু। তৈরি করেছেন স্বাধীন ফ্লাটার ডেভেলপার ইস্তিয়াক আহমেদ।';
 
   @override
   String get aboutBody2 =>
-      'চ্যানেলগুলো তৃতীয় পক্ষের সার্ভার থেকে চলে। Kickora কোনো কন্টেন্ট হোস্ট বা মালিকানা করে না।';
+      'চ্যানেলগুলো তৃতীয় পক্ষের সার্ভার থেকে চলে। Drishto কোনো কন্টেন্ট হোস্ট বা মালিকানা করে না।';
 
   @override
   String get fixturesTitle => 'আজকের ফুটবল';

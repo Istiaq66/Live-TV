@@ -101,13 +101,13 @@ abstract class AppLocalizations {
   /// No description provided for @appName.
   ///
   /// In en, this message translates to:
-  /// **'Kickora'**
+  /// **'Drishto'**
   String get appName;
 
   /// No description provided for @appTagline.
   ///
   /// In en, this message translates to:
-  /// **'Live sports & TV'**
+  /// **'Live TV & sports'**
   String get appTagline;
 
   /// No description provided for @showOnlineOnly.
@@ -185,13 +185,13 @@ abstract class AppLocalizations {
   /// No description provided for @aboutBody1.
   ///
   /// In en, this message translates to:
-  /// **'Kickora is a free live-TV and sports aggregator built by Istiaq Ahmed, an independent Flutter developer.'**
+  /// **'Drishto is a free live-TV aggregator — news, movies, entertainment, music, kids, sports and more — built by Istiaq Ahmed, an independent Flutter developer.'**
   String get aboutBody1;
 
   /// No description provided for @aboutBody2.
   ///
   /// In en, this message translates to:
-  /// **'Channels stream from third-party providers. Kickora does not host or own any content.'**
+  /// **'Channels stream from third-party providers. Drishto does not host or own any content.'**
   String get aboutBody2;
 
   /// No description provided for @fixturesTitle.

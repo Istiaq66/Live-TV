@@ -2,7 +2,7 @@
     <!-- Streaming needs network; many IPTV sources are plain http:// so allow cleartext. -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="Kickora"
+        android:label="Drishto"
         android:name="${applicationName}"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
@@ -86,14 +87,22 @@ class _HomeScreenState extends State<HomeScreen> {
   /// the initial load and every rebuffer long). Still enough slack to ride out
   /// normal jitter; don't wait forever on a dead host.
   Future<void> _tunePlayer() async {
-    final p = _player.platform;
-    if (p is! NativePlayer) return;
-    await p.setProperty('cache', 'yes');
-    await p.setProperty('demuxer-readahead-secs', '10');
-    await p.setProperty('cache-secs', '10');
-    // Resume as soon as a small amount is buffered instead of refilling fully.
-    await p.setProperty('cache-pause-wait', '1');
-    await p.setProperty('network-timeout', '10');
+    // mpv properties are native-only; the web backend has no such API (and the
+    // stub NativePlayer doesn't define setProperty, so don't reference it at
+    // compile time on web). Call via dynamic and skip on web.
+    if (kIsWeb) return;
+    final dynamic p = _player.platform;
+    if (p == null) return;
+    try {
+      await p.setProperty('cache', 'yes');
+      await p.setProperty('demuxer-readahead-secs', '10');
+      await p.setProperty('cache-secs', '10');
+      // Resume as soon as a small amount is buffered instead of refilling fully.
+      await p.setProperty('cache-pause-wait', '1');
+      await p.setProperty('network-timeout', '10');
+    } catch (_) {
+      // Backend without setProperty — leave defaults.
+    }
   }
 
   Future<void> _load() async {
@@ -141,12 +150,12 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  /// Top-level categories, ordered with Sports first (the main use case).
+  /// Top-level categories in a general-TV order (Entertainment leads).
   List<String> get _categories {
     final set = <String>{for (final c in _all) c.category};
     const order = [
-      'Sports', 'News', 'Movies', 'Entertainment', 'Music', 'Kids',
-      'Test (always-on)',
+      'Entertainment', 'News', 'Movies', 'Music', 'Kids', 'Sports',
+      'Religious', 'Test (always-on)',
     ];
     final extras = set.where((c) => !order.contains(c)).toList()..sort();
     final ordered = [...order.where(set.contains), ...extras];
@@ -184,15 +193,20 @@ class _HomeScreenState extends State<HomeScreen> {
     // Snapshot the URLs to check against the *non*-online filter, so enabling
     // "online only" mid-check doesn't shrink the set out from under us.
     final q = _query.trim().toLowerCase();
-    final urls = _all
-        .where((c) {
-          final mg = _group == 'All' || c.group == _group;
-          final mq = q.isEmpty || c.name.toLowerCase().contains(q);
-          return _inCategory(c) && mg && mq;
-        })
-        .map((c) => c.url)
-        .toList();
+    final visible = _all.where((c) {
+      final mg = _group == 'All' || c.group == _group;
+      final mq = q.isEmpty || c.name.toLowerCase().contains(q);
+      return _inCategory(c) && mg && mq;
+    }).toList();
+    final urls = visible.map((c) => c.url).toList();
     if (urls.isEmpty) return;
+
+    // Probe each stream with its own headers so header-gated origins aren't
+    // wrongly marked offline.
+    final headers = <String, Map<String, String>>{
+      for (final c in visible)
+        if (c.headers.isNotEmpty) c.url: c.headers,
+    };
 
     setState(() {
       _checking = true;
@@ -203,6 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     await _checker.checkAll(
       urls,
+      headers: headers,
       onResult: (url, alive) {
         if (!mounted) return;
         setState(() {
@@ -223,14 +238,21 @@ class _HomeScreenState extends State<HomeScreen> {
     _tried.add(channel.url);
     setState(() => _current = channel);
     // Low-latency live tuning; mpv handles HLS + raw mpegts transparently.
-    _player.open(Media(channel.url));
+    // Pass per-stream HTTP headers (UA/Referer/Origin) so origins that 403
+    // without them still play.
+    _player.open(_mediaFor(channel));
     _prefs?.saveLastWatched(channel.url);
   }
 
   void _retry() {
     final c = _current;
-    if (c != null) _player.open(Media(c.url));
+    if (c != null) _player.open(_mediaFor(c));
   }
+
+  Media _mediaFor(Channel c) => Media(
+        c.url,
+        httpHeaders: c.headers.isEmpty ? null : c.headers,
+      );
 
   /// Called when the player reports a playback error: mark the source offline
   /// and hop to the next viable source for the same channel / group.
@@ -312,11 +334,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(Icons.sports_soccer, color: Colors.white, size: 40),
+                  const Icon(Icons.live_tv, color: Colors.white, size: 40),
                   const SizedBox(height: 8),
-                  const Text(
-                    'Kickora',
-                    style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+                  Text(
+                    l.appName,
+                    style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
                   ),
                   Text(l.appTagline, style: const TextStyle(color: Colors.white70)),
                 ],
@@ -407,9 +429,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final l = AppLocalizations.of(context);
     showAboutDialog(
       context: context,
-      applicationName: 'Kickora',
+      applicationName: l.appName,
       applicationVersion: _version.isEmpty ? null : l.versionLabel(_version),
-      applicationIcon: const Icon(Icons.sports_soccer, size: 40, color: Color(0xFF1B5E20)),
+      applicationIcon: const Icon(Icons.live_tv, size: 40, color: Color(0xFF1B5E20)),
       applicationLegalese: '© 2026 Istiaq Ahmed',
       children: [
         const SizedBox(height: 12),
@@ -527,11 +549,11 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       drawer: _buildDrawer(),
       appBar: AppBar(
-        title: const Row(
+        title: Row(
           children: [
-            Icon(Icons.sports_soccer),
-            SizedBox(width: 8),
-            Text('Kickora'),
+            const Icon(Icons.live_tv),
+            const SizedBox(width: 8),
+            Text(AppLocalizations.of(context).appName),
           ],
         ),
         actions: [

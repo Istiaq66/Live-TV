@@ -9,10 +9,10 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appName => 'Kickora';
+  String get appName => 'Drishto';
 
   @override
-  String get appTagline => 'Live sports & TV';
+  String get appTagline => 'Live TV & sports';
 
   @override
   String get showOnlineOnly => 'Show online only';
@@ -56,11 +56,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aboutBody1 =>
-      'Kickora is a free live-TV and sports aggregator built by Istiaq Ahmed, an independent Flutter developer.';
+      'Drishto is a free live-TV aggregator — news, movies, entertainment, music, kids, sports and more — built by Istiaq Ahmed, an independent Flutter developer.';
 
   @override
   String get aboutBody2 =>
-      'Channels stream from third-party providers. Kickora does not host or own any content.';
+      'Channels stream from third-party providers. Drishto does not host or own any content.';
 
   @override
   String get fixturesTitle => 'Today\'s Football';

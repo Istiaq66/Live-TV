@@ -4,10 +4,9 @@
 //   dart run flutter_launcher_icons
 //
 // Produces:
-//   assets/icon/app_icon.png     1024² — green field + soccer ball (full bleed)
-//   assets/icon/app_icon_fg.png  1024² — ball only, transparent (adaptive fg)
+//   assets/icon/app_icon.png     1024² — green field + TV/live glyph (full bleed)
+//   assets/icon/app_icon_fg.png  1024² — TV only, transparent (adaptive fg)
 import 'dart:io';
-import 'dart:math' as math;
 
 import 'package:image/image.dart' as img;
 
@@ -15,22 +14,23 @@ const int size = 1024;
 final green = img.ColorRgb8(0x1B, 0x5E, 0x20);
 final greenLight = img.ColorRgb8(0x2E, 0x7D, 0x32);
 final white = img.ColorRgb8(0xFF, 0xFF, 0xFF);
-final black = img.ColorRgb8(0x14, 0x14, 0x14);
+final screenDark = img.ColorRgb8(0x10, 0x2A, 0x14);
+final red = img.ColorRgb8(0xFF, 0x45, 0x57); // "live" accent
 
 void main() {
   Directory('assets/icon').createSync(recursive: true);
 
-  // Full icon: rounded green background + large ball.
+  // Full icon: rounded green background + TV glyph.
   final full = img.Image(width: size, height: size, numChannels: 4);
   img.fill(full, color: img.ColorRgba8(0, 0, 0, 0));
   _verticalGradientRoundRect(full, radius: 180);
-  _drawBall(full, size / 2, size / 2, size * 0.36);
+  _drawTv(full, size / 2, size * 0.54, size * 0.62);
   File('assets/icon/app_icon.png').writeAsBytesSync(img.encodePng(full));
 
-  // Adaptive foreground: transparent, ball sized within the inner safe zone.
+  // Adaptive foreground: transparent, TV sized within the inner safe zone.
   final fg = img.Image(width: size, height: size, numChannels: 4);
   img.fill(fg, color: img.ColorRgba8(0, 0, 0, 0));
-  _drawBall(fg, size / 2, size / 2, size * 0.30);
+  _drawTv(fg, size / 2, size * 0.52, size * 0.52);
   File('assets/icon/app_icon_fg.png').writeAsBytesSync(img.encodePng(fg));
 
   stdout.writeln('Wrote assets/icon/app_icon.png + app_icon_fg.png');
@@ -66,46 +66,52 @@ void _verticalGradientRoundRect(img.Image im, {required int radius}) {
   corner(size - 1 - radius, size - 1 - radius, 1, 1);
 }
 
-/// Classic black-and-white soccer ball: white disc, outline, centre pentagon,
-/// five outer pentagons joined by seams.
-void _drawBall(img.Image im, double cx, double cy, double r) {
-  img.fillCircle(im, x: cx.round(), y: cy.round(), radius: r.round(), color: white);
-  // Outline ring.
-  for (var i = 0; i < 10; i++) {
-    img.drawCircle(im, x: cx.round(), y: cy.round(), radius: r.round() - i, color: black);
-  }
+/// A television set with two antennas and a red "play/live" triangle on a dark
+/// screen. [w] is the body width; height follows a 4:3-ish ratio.
+void _drawTv(img.Image im, double cx, double cy, double w) {
+  final h = w * 0.74;
+  final left = cx - w / 2, top = cy - h / 2;
+  final right = left + w, bottom = top + h;
+  final t = (w * 0.045).round(); // antenna / stroke thickness
 
-  final centre = _pentagon(cx, cy, r * 0.28, -math.pi / 2);
-  // Outer pentagons + seams first (so the centre pentagon sits on top).
-  for (var i = 0; i < 5; i++) {
-    final a = -math.pi / 2 + i * 2 * math.pi / 5;
-    final ox = cx + r * 0.62 * math.cos(a);
-    final oy = cy + r * 0.62 * math.sin(a);
-    // Seam from ball centre outward.
-    img.drawLine(
-      im,
-      x1: cx.round(),
-      y1: cy.round(),
-      x2: (cx + r * math.cos(a)).round(),
-      y2: (cy + r * math.sin(a)).round(),
-      color: black,
-      thickness: (r * 0.05).round(),
-    );
-    final outer = _pentagon(ox, oy, r * 0.20, a + math.pi);
-    img.fillPolygon(im, vertices: outer, color: black);
-  }
-  img.fillPolygon(im, vertices: centre, color: black);
+  // Antennas: V from a point above the set down to the top edge.
+  final apexX = cx.round();
+  final apexY = (top - h * 0.34).round();
+  img.drawLine(im, x1: apexX, y1: apexY,
+      x2: (cx - w * 0.20).round(), y2: top.round(), color: white, thickness: t);
+  img.drawLine(im, x1: apexX, y1: apexY,
+      x2: (cx + w * 0.20).round(), y2: top.round(), color: white, thickness: t);
+  img.fillCircle(im, x: apexX, y: apexY, radius: (w * 0.04).round(), color: white);
+
+  // TV body (white) with rounded corners knocked out, then dark screen inset.
+  final bodyR = (w * 0.10).round();
+  _roundRect(im, left.round(), top.round(), right.round(), bottom.round(),
+      bodyR, white);
+
+  final inset = w * 0.085;
+  final sL = (left + inset).round(), sT = (top + inset).round();
+  final sR = (right - inset).round(), sB = (bottom - inset).round();
+  _roundRect(im, sL, sT, sR, sB, (w * 0.05).round(), screenDark);
+
+  // Centred "play" triangle (points right) = live video.
+  final tri = w * 0.13;
+  final tcx = cx, tcy = cy;
+  img.fillPolygon(im, vertices: [
+    img.Point(tcx - tri * 0.55, tcy - tri),
+    img.Point(tcx - tri * 0.55, tcy + tri),
+    img.Point(tcx + tri * 0.95, tcy),
+  ], color: red);
 }
 
-/// Five vertices of a regular pentagon centred at (cx,cy).
-List<img.Point> _pentagon(double cx, double cy, double radius, double rot) {
-  return [
-    for (var i = 0; i < 5; i++)
-      img.Point(
-        cx + radius * math.cos(rot + i * 2 * math.pi / 5),
-        cy + radius * math.sin(rot + i * 2 * math.pi / 5),
-      ),
-  ];
+/// Filled rounded rectangle (axis-aligned).
+void _roundRect(img.Image im, int x1, int y1, int x2, int y2, int r,
+    img.Color color) {
+  img.fillRect(im, x1: x1 + r, y1: y1, x2: x2 - r, y2: y2, color: color);
+  img.fillRect(im, x1: x1, y1: y1 + r, x2: x2, y2: y2 - r, color: color);
+  img.fillCircle(im, x: x1 + r, y: y1 + r, radius: r, color: color);
+  img.fillCircle(im, x: x2 - r, y: y1 + r, radius: r, color: color);
+  img.fillCircle(im, x: x1 + r, y: y2 - r, radius: r, color: color);
+  img.fillCircle(im, x: x2 - r, y: y2 - r, radius: r, color: color);
 }
 
 int _lerp(num a, num b, double t) => (a + (b - a) * t).round().clamp(0, 255);

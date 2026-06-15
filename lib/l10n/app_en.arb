@@ -1,7 +1,7 @@
 {
   "@@locale": "en",
-  "appName": "Kickora",
-  "appTagline": "Live sports & TV",
+  "appName": "Drishto",
+  "appTagline": "Live TV & sports",
 
   "showOnlineOnly": "Show online only",
   "healthCheck": "Health-check visible channels",
@@ -23,8 +23,8 @@
   "madeBy": "Made by Istiaq Ahmed",
   "language": "Language",
 
-  "aboutBody1": "Kickora is a free live-TV and sports aggregator built by Istiaq Ahmed, an independent Flutter developer.",
-  "aboutBody2": "Channels stream from third-party providers. Kickora does not host or own any content.",
+  "aboutBody1": "Drishto is a free live-TV aggregator — news, movies, entertainment, music, kids, sports and more — built by Istiaq Ahmed, an independent Flutter developer.",
+  "aboutBody2": "Channels stream from third-party providers. Drishto does not host or own any content.",
 
   "fixturesTitle": "Today's Football",
   "fixturesLoadError": "Couldn't load fixtures.\n{error}",

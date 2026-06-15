@@ -74,9 +74,11 @@ class _PlayerPanelState extends State<PlayerPanel> {
     _subs.add(widget.player.stream.tracks.listen((t) {
       if (!mounted) return;
       // Drop the synthetic "auto"/"no" entries; we add Auto ourselves.
+      // Sort highest resolution first (1080p → 720p → 480p …).
       final real = t.video
           .where((v) => v.id != 'auto' && v.id != 'no')
-          .toList();
+          .toList()
+        ..sort((a, b) => (b.h ?? 0).compareTo(a.h ?? 0));
       setState(() => _videoTracks = real);
     }));
     _subs.add(widget.player.stream.track.listen((t) {
@@ -167,7 +169,10 @@ class _PlayerPanelState extends State<PlayerPanel> {
               child: _NowPlayingBadge(channel: widget.channel!),
             ),
 
-          if (widget.channel != null && _videoTracks.isNotEmpty)
+          // Always show when a channel is playing. With a multi-variant HLS
+          // source the menu lists Auto + each resolution (1080p/720p/480p…);
+          // single-quality sources show just Auto.
+          if (widget.channel != null)
             Positioned(
               right: 12,
               top: 12,
@@ -288,7 +293,7 @@ class _EmptyState extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.sports_soccer, color: Colors.white24, size: 72),
+          const Icon(Icons.live_tv, color: Colors.white24, size: 72),
           const SizedBox(height: 12),
           Text(
             AppLocalizations.of(context).pickChannel,

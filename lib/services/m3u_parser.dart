@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import '../models/channel.dart';
 
 /// Parses M3U / M3U8 playlist text into [Channel]s.
@@ -6,10 +8,14 @@ import '../models/channel.dart';
 /// ```
 /// #EXTM3U
 /// #EXTINF:-1 [attrs],Display Name 🇦🇷
+/// #EXTVLCOPT:http-user-agent=Mozilla/5.0
+/// #EXTVLCOPT:http-referrer=https://example.com/
 /// http://host/stream.m3u8
 /// ```
-/// Country flag emoji at the end of the title is split out, and a coarse
-/// [Channel.group] is inferred from keywords in the name.
+/// Country flag emoji at the end of the title is split out, a coarse
+/// [Channel.group] is inferred from keywords in the name, and per-stream HTTP
+/// headers (User-Agent / Referer / Origin) are collected so origins that 403
+/// without them can still play.
 class M3uParser {
   static List<Channel> parse(String content) {
     final lines = content.split(RegExp(r'\r?\n'));
@@ -17,6 +23,7 @@ class M3uParser {
 
     String? pendingTitle;
     String? pendingGroupTitle; // from the EXTINF group-title="..." attribute
+    var pendingHeaders = <String, String>{};
     for (final raw in lines) {
       final line = raw.trim();
       if (line.isEmpty) continue;
@@ -28,6 +35,15 @@ class M3uParser {
         // Capture the playlist-declared category, if any.
         final attrs = comma == -1 ? line : line.substring(0, comma);
         pendingGroupTitle = _groupTitleRegex.firstMatch(attrs)?.group(1)?.trim();
+        // Some lists embed the agent as an EXTINF attribute.
+        final ua = _attrRegex('user-agent').firstMatch(attrs)?.group(1)?.trim();
+        if (ua != null && ua.isNotEmpty) pendingHeaders['User-Agent'] = ua;
+      } else if (line.startsWith('#EXTVLCOPT:')) {
+        // #EXTVLCOPT:http-user-agent=... / http-referrer=... / http-origin=...
+        _applyVlcOpt(line.substring('#EXTVLCOPT:'.length), pendingHeaders);
+      } else if (line.startsWith('#EXTHTTP:')) {
+        // #EXTHTTP:{"User-Agent":"...","Referer":"..."}
+        _applyExtHttp(line.substring('#EXTHTTP:'.length), pendingHeaders);
       } else if (line.startsWith('#')) {
         // Other directive (#EXTM3U, #EXTGRP, etc.) — ignore.
         continue;
@@ -44,14 +60,51 @@ class M3uParser {
             category: category,
             group: _inferGroup(cleanName),
             flag: flag,
+            headers: Map.unmodifiable(pendingHeaders),
           ),
         );
         pendingTitle = null;
         pendingGroupTitle = null;
+        pendingHeaders = <String, String>{};
       }
     }
     return channels;
   }
+
+  /// Maps a single `key=value` VLC option to a standard HTTP header.
+  static void _applyVlcOpt(String opt, Map<String, String> out) {
+    final eq = opt.indexOf('=');
+    if (eq == -1) return;
+    final key = opt.substring(0, eq).trim().toLowerCase();
+    final value = opt.substring(eq + 1).trim();
+    if (value.isEmpty) return;
+    switch (key) {
+      case 'http-user-agent':
+        out['User-Agent'] = value;
+      case 'http-referrer':
+      case 'http-referer':
+        out['Referer'] = value;
+      case 'http-origin':
+        out['Origin'] = value;
+    }
+  }
+
+  /// Parses the JSON object after `#EXTHTTP:` into headers (best-effort).
+  static void _applyExtHttp(String json, Map<String, String> out) {
+    try {
+      final decoded = jsonDecode(json);
+      if (decoded is Map) {
+        decoded.forEach((k, v) {
+          if (k is String && v != null) out[k] = v.toString();
+        });
+      }
+    } catch (_) {
+      // Malformed #EXTHTTP — skip it.
+    }
+  }
+
+  // Matches a quoted EXTINF attribute like `user-agent="Mozilla/5.0"`.
+  static RegExp _attrRegex(String name) => RegExp('$name="([^"]*)"');
 
   /// Splits a trailing flag emoji (regional-indicator pair) off the title.
   static (String, String?) _splitFlag(String title) {
@@ -77,8 +130,12 @@ class M3uParser {
     if (g.contains('KID') || g.contains('CARTOON') || g.contains('CHILD')) return 'Kids';
     if (g.contains('MUSIC')) return 'Music';
     if (g.contains('SPORT')) return 'Sports';
+    if (g.contains('RELIGI') || g.contains('ISLAM') || g.contains('QURAN') ||
+        g.contains('SPIRITUAL')) {
+      return 'Religious';
+    }
     if (g == 'UNDEFINED' || g == 'OTHER') return null; // fall back to inference
-    // Entertainment, General, Family, Culture, Documentary, Religious, etc.
+    // Entertainment, General, Family, Culture, Documentary, etc.
     return 'Entertainment';
   }
 
@@ -87,7 +144,9 @@ class M3uParser {
     return uri?.host.isNotEmpty == true ? uri!.host : 'Unknown';
   }
 
-  /// Top-level genre. Sports is the default since most entries are sports.
+  /// Top-level genre. Tries explicit genre keywords first, then treats a
+  /// recognised sports broadcaster (or a name containing "sport") as Sports,
+  /// and falls back to Entertainment for everything else.
   static String _inferCategory(String name) {
     final n = name.toUpperCase();
     for (final entry in _categoryKeywords.entries) {
@@ -95,7 +154,8 @@ class M3uParser {
         if (n.contains(kw)) return entry.key;
       }
     }
-    return 'Sports';
+    if (n.contains('SPORT') || _inferGroup(name) != 'Other') return 'Sports';
+    return 'Entertainment';
   }
 
   /// Coarse grouping by recognisable broadcaster keywords.
@@ -132,7 +192,11 @@ class M3uParser {
       'KIDS', 'CARTOON', 'NICK', 'DISNEY', 'BABY', 'TOON', 'INFANTIL',
       'JUNIOR', 'NIÑOS',
     ],
-    'Music': ['MUSIC', 'MTV', 'VEVO', 'TRACE', 'STINGRAY', 'HITS'],
+    'Music': ['MUSIC', 'MTV', 'VEVO', 'TRACE', 'STINGRAY', 'HITS', '9XM', 'DHOOM'],
+    'Religious': [
+      'QURAN', 'SUNNAH', 'ISLAM', 'MADANI', 'ISTIQAMA', 'PEACE TV', 'NAAT',
+      'HADITH',
+    ],
     'Entertainment': [
       'COMEDY', 'NOVELA', 'NOVELAS', 'TELENOVELA', 'ENTRETENIMIENTO',
       'REALITY', 'GARAGE', 'RED BULL',

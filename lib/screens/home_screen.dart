@@ -254,7 +254,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _retry() {
     final c = _current;
-    if (c != null) _player.open(_mediaFor(c));
+    // Mirror _play: autostart and consume the tap's user-activation so the
+    // stream runs immediately instead of loading paused (needing a 2nd tap).
+    if (c != null) {
+      _player.open(_mediaFor(c), play: true).then((_) {
+        if (mounted) _player.play();
+      });
+    }
   }
 
   Media _mediaFor(Channel c) => Media(

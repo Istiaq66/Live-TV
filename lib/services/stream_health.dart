@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:http/http.dart' as http;
 
+import '../config.dart';
+
 /// Liveness state of a stream URL.
 enum StreamStatus { unknown, checking, online, offline }
 
@@ -17,7 +19,9 @@ class StreamHealthChecker {
   final Duration timeout;
 
   Future<bool> isAlive(String url, {Map<String, String> headers = const {}}) async {
-    final uri = Uri.tryParse(url);
+    // On web, probe via the CORS proxy (direct fetches are blocked); native
+    // hits the origin directly.
+    final uri = Uri.tryParse(proxiedUrl(url));
     if (uri == null || !uri.hasScheme) return false;
 
     final client = http.Client();

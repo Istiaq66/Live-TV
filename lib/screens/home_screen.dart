@@ -4,6 +4,7 @@ import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import '../config.dart';
 import '../l10n/app_localizations.dart';
 import '../main.dart' show setAppLocale, localeNotifier;
 import '../models/channel.dart';
@@ -250,7 +251,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Media _mediaFor(Channel c) => Media(
-        c.url,
+        proxiedUrl(c.url),
         httpHeaders: c.headers.isEmpty ? null : c.headers,
       );
 

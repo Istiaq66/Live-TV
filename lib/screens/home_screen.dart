@@ -69,6 +69,10 @@ class _HomeScreenState extends State<HomeScreen> {
   int _autoSkips = 0;
   static const int _maxAutoSkips = 6;
 
+  // Bumped on each manual retry so PlayerPanel re-arms its failure reporting
+  // for the same channel (see PlayerPanel.retrySignal).
+  int _retrySignal = 0;
+
   @override
   void initState() {
     super.initState();
@@ -254,13 +258,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _retry() {
     final c = _current;
+    if (c == null) return;
+    // Treat a manual retry as a fresh attempt: re-arm the auto-skip session and
+    // bump the retry signal so PlayerPanel re-enables failure reporting (it
+    // only resets on a channel-url change otherwise, and retry reopens the same
+    // url). Without this, a retried source that fails again can't auto-skip.
+    _tried
+      ..clear()
+      ..add(c.url);
+    _autoSkips = 0;
+    setState(() => _retrySignal++);
     // Mirror _play: autostart and consume the tap's user-activation so the
     // stream runs immediately instead of loading paused (needing a 2nd tap).
-    if (c != null) {
-      _player.open(_mediaFor(c), play: true).then((_) {
-        if (mounted) _player.play();
-      });
-    }
+    _player.open(_mediaFor(c), play: true).then((_) {
+      if (mounted) _player.play();
+    });
   }
 
   Media _mediaFor(Channel c) => Media(
@@ -634,6 +646,7 @@ class _HomeScreenState extends State<HomeScreen> {
       controller: _controller,
       channel: _current,
       onRetry: _retry,
+      retrySignal: _retrySignal,
       onError: _onStreamError,
       onPlaying: _onStreamPlaying,
     );

@@ -15,6 +15,7 @@ class PlayerPanel extends StatefulWidget {
     required this.controller,
     required this.channel,
     required this.onRetry,
+    this.retrySignal = 0,
     this.onError,
     this.onPlaying,
   });
@@ -23,6 +24,11 @@ class PlayerPanel extends StatefulWidget {
   final VideoController controller;
   final Channel? channel;
   final VoidCallback onRetry;
+
+  /// Bumped by the parent on each manual retry of the *same* channel. A change
+  /// re-arms failure reporting + the settle window, just like a channel switch
+  /// (otherwise a retried-then-failing source can never auto-skip again).
+  final int retrySignal;
 
   /// Fired once per channel when playback errors — lets the parent auto-skip.
   final VoidCallback? onError;
@@ -140,8 +146,10 @@ class _PlayerPanelState extends State<PlayerPanel> {
   @override
   void didUpdateWidget(PlayerPanel old) {
     super.didUpdateWidget(old);
-    // New channel selected → drop the previous error banner + re-arm reporting.
-    if (old.channel?.url != widget.channel?.url) {
+    // New channel selected — or the same channel manually retried — drops the
+    // previous error banner + re-arms reporting.
+    if (old.channel?.url != widget.channel?.url ||
+        old.retrySignal != widget.retrySignal) {
       _reported = false;
       _switchedAt = DateTime.now(); // start settle window for stale errors
       _watchdog?.cancel();

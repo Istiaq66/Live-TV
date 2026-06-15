@@ -16,6 +16,13 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 ///   const kStreamProxyBase = 'https://drishto-proxy.yourname.workers.dev';
 const String kStreamProxyBase = 'https://drishto-proxy.ahmedboby66.workers.dev';
 
+/// Shared secret sent to the proxy as `?t=` to gate abuse. Must match the
+/// worker's `PROXY_TOKEN` secret. Leave empty to disable the token check (the
+/// worker only enforces it when its own `PROXY_TOKEN` is set). Note: in a web
+/// build this value ships in client JS, so it deters casual abuse rather than
+/// being truly secret — the worker's SSRF guard is the real protection.
+const String kStreamProxyToken = '';
+
 /// Stream hosts that cannot work on the web build: they geo-restrict to
 /// Bangladesh (the proxy egresses from Cloudflare's non-BD edge → 403/522) or
 /// serve expired-token URLs that 404. Channels on these hosts are hidden on web
@@ -50,5 +57,8 @@ String proxiedUrl(String url, [Map<String, String> headers = const {}]) {
   final ua = headers['User-Agent'];
   if (ref != null && ref.isNotEmpty) out += '&ref=${Uri.encodeComponent(ref)}';
   if (ua != null && ua.isNotEmpty) out += '&ua=${Uri.encodeComponent(ua)}';
+  if (kStreamProxyToken.isNotEmpty) {
+    out += '&t=${Uri.encodeComponent(kStreamProxyToken)}';
+  }
   return out;
 }

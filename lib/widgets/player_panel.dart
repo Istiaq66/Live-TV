@@ -37,6 +37,16 @@ class _PlayerPanelState extends State<PlayerPanel> {
   Timer? _watchdog; // fires if a source buffers forever without erroring
   final List<StreamSubscription> _subs = [];
 
+  // The player is shared across channels, so a trailing error event from the
+  // previous source can arrive just after we switch. Ignore error events for a
+  // brief settle window after a channel change so we don't wrongly blame (and
+  // auto-skip away from) the newly selected channel. The watchdog still catches
+  // a source that genuinely never starts.
+  DateTime? _switchedAt;
+  static const Duration _settle = Duration(milliseconds: 1500);
+  bool get _isSettling =>
+      _switchedAt != null && DateTime.now().difference(_switchedAt!) < _settle;
+
   // Resolution picker: available HLS variant video tracks + the active one.
   // `VideoTrack.auto()` lets mpv adapt bitrate to bandwidth (the default).
   List<VideoTrack> _videoTracks = const [];
@@ -61,6 +71,8 @@ class _PlayerPanelState extends State<PlayerPanel> {
     }));
     _subs.add(widget.player.stream.error.listen((e) {
       if (!mounted) return;
+      // Drop a stale error bleeding over from the previous channel's stream.
+      if (_isSettling) return;
       setState(() => _error = e);
       _fail();
     }));
@@ -125,6 +137,7 @@ class _PlayerPanelState extends State<PlayerPanel> {
     // New channel selected → drop the previous error banner + re-arm reporting.
     if (old.channel?.url != widget.channel?.url) {
       _reported = false;
+      _switchedAt = DateTime.now(); // start settle window for stale errors
       _watchdog?.cancel();
       setState(() {
         _error = null;

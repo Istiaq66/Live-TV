@@ -251,7 +251,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Media _mediaFor(Channel c) => Media(
-        proxiedUrl(c.url),
+        proxiedUrl(c.url, c.headers),
         httpHeaders: c.headers.isEmpty ? null : c.headers,
       );
 

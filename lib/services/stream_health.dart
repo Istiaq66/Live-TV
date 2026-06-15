@@ -21,7 +21,7 @@ class StreamHealthChecker {
   Future<bool> isAlive(String url, {Map<String, String> headers = const {}}) async {
     // On web, probe via the CORS proxy (direct fetches are blocked); native
     // hits the origin directly.
-    final uri = Uri.tryParse(proxiedUrl(url));
+    final uri = Uri.tryParse(proxiedUrl(url, headers));
     if (uri == null || !uri.hasScheme) return false;
 
     final client = http.Client();

@@ -70,14 +70,18 @@ export default {
       return new Response('Bad url', { status: 400, headers: CORS });
     }
 
-    // Forward to origin with a player-like User-Agent (many origins 403 a bare
-    // fetch). Range is forwarded so seeking/segment byte-ranges work.
+    // Per-stream Referer / User-Agent come from the app as query params
+    // (browsers forbid setting those request headers from JS). Fall back to a
+    // player UA and the origin's own host when not supplied.
+    const refParam = reqUrl.searchParams.get('ref');
+    const uaParam = reqUrl.searchParams.get('ua');
+
     const headers = new Headers();
-    headers.set('User-Agent', 'VLC/3.0.20 LibVLC/3.0.20');
+    headers.set('User-Agent', uaParam || 'VLC/3.0.20 LibVLC/3.0.20');
     headers.set('Accept', '*/*');
     const range = request.headers.get('Range');
     if (range) headers.set('Range', range);
-    headers.set('Referer', `${upstream.protocol}//${upstream.host}/`);
+    headers.set('Referer', refParam || `${upstream.protocol}//${upstream.host}/`);
 
     let resp;
     try {
@@ -104,7 +108,10 @@ export default {
     // this proxy, resolved against the playlist's own base URL.
     const text = await resp.text();
     const base = `${reqUrl.origin}${reqUrl.pathname}`;
-    const wrap = (abs) => `${base}?url=${encodeURIComponent(abs)}`;
+    const suffix =
+      (refParam ? `&ref=${encodeURIComponent(refParam)}` : '') +
+      (uaParam ? `&ua=${encodeURIComponent(uaParam)}` : '');
+    const wrap = (abs) => `${base}?url=${encodeURIComponent(abs)}${suffix}`;
 
     const rewritten = text.split('\n').map((line) => {
       const t = line.trim();

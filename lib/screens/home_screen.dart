@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../models/channel.dart';
 import '../models/fixture.dart';
@@ -10,6 +11,7 @@ import '../services/preferences_service.dart';
 import '../services/stream_health.dart';
 import '../widgets/channel_tile.dart';
 import '../widgets/player_panel.dart';
+import 'privacy_policy_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -35,6 +37,9 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Channel> _all = [];
   bool _loading = true;
   String? _loadError;
+
+  // App version string for the About dialog, e.g. "1.1.0 (1)".
+  String _version = '';
 
   // Persisted: favorite stream URLs.
   Set<String> _favorites = {};
@@ -62,6 +67,16 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _tunePlayer();
     _load();
+    _loadVersion();
+  }
+
+  Future<void> _loadVersion() async {
+    try {
+      final info = await PackageInfo.fromPlatform();
+      if (mounted) setState(() => _version = '${info.version} (${info.buildNumber})');
+    } catch (_) {
+      // Non-fatal: About just omits the version if it can't be read.
+    }
   }
 
   /// Tune libmpv for live streams. Keep readahead/cache short so the first
@@ -280,6 +295,90 @@ class _HomeScreenState extends State<HomeScreen> {
     return tokens.join(' ').trim();
   }
 
+  /// Navigation drawer: matches + legal/about entries.
+  Widget _buildDrawer() {
+    return Drawer(
+      child: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(color: Color(0xFF1B5E20)),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(Icons.sports_soccer, color: Colors.white, size: 40),
+                  SizedBox(height: 8),
+                  Text(
+                    'Kickora',
+                    style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                  Text('Live sports & TV', style: TextStyle(color: Colors.white70)),
+                ],
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.sports_soccer),
+              title: const Text("Today's Football"),
+              subtitle: const Text('Matches scheduled today'),
+              onTap: () {
+                Navigator.of(context).pop(); // close drawer
+                _showFixtures();
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.privacy_tip_outlined),
+              title: const Text('Privacy Policy'),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const PrivacyPolicyScreen()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.info_outline),
+              title: const Text('About'),
+              subtitle: Text(_version.isEmpty ? '' : 'Version $_version'),
+              onTap: () {
+                Navigator.of(context).pop();
+                _showAbout();
+              },
+            ),
+            const Spacer(),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                'Made by Istiaq Ahmed${_version.isEmpty ? '' : ' • v$_version'}',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showAbout() {
+    showAboutDialog(
+      context: context,
+      applicationName: 'Kickora',
+      applicationVersion: _version.isEmpty ? null : 'Version $_version',
+      applicationIcon: const Icon(Icons.sports_soccer, size: 40, color: Color(0xFF1B5E20)),
+      applicationLegalese: '© 2026 Istiaq Ahmed',
+      children: const [
+        SizedBox(height: 12),
+        Text('Kickora is a free live-TV and sports aggregator built by '
+            'Istiaq Ahmed, an independent Flutter developer.'),
+        SizedBox(height: 12),
+        Text('Channels stream from third-party providers. Kickora does not '
+            'host or own any content.'),
+      ],
+    );
+  }
+
   /// Bottom sheet listing today's football matches (TheSportsDB). Tapping a
   /// match jumps to the Sports category so the user can pick the broadcaster.
   void _showFixtures() {
@@ -384,6 +483,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final wide = MediaQuery.sizeOf(context).width >= 900;
 
     return Scaffold(
+      drawer: _buildDrawer(),
       appBar: AppBar(
         title: const Row(
           children: [
@@ -394,11 +494,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: [
           if (!_loading && _loadError == null) ...[
-            IconButton(
-              tooltip: "Today's football",
-              icon: const Icon(Icons.calendar_today),
-              onPressed: _showFixtures,
-            ),
             IconButton(
               tooltip: 'Show online only',
               isSelected: _onlineOnly,

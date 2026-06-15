@@ -3,6 +3,8 @@ import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import '../l10n/app_localizations.dart';
+import '../main.dart' show setAppLocale, localeNotifier;
 import '../models/channel.dart';
 import '../models/fixture.dart';
 import '../services/fixtures_service.dart';
@@ -239,18 +241,19 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() => _status[failed.url] = StreamStatus.offline);
     }
 
+    final l = AppLocalizations.of(context);
     if (_autoSkips >= _maxAutoSkips) {
-      _toast('No working source found. Try Health-check (top-right).');
+      _toast(l.noWorkingSource);
       return;
     }
 
     final next = _nextSource(failed);
     if (next == null) {
-      _toast('“${failed.name}” is down — no other source available.');
+      _toast(l.sourceDownNoOther(failed.name));
       return;
     }
     _autoSkips++;
-    _toast('“${failed.name}” down — trying another source…');
+    _toast(l.sourceDownTryingAnother(failed.name));
     _play(next, userInitiated: false);
   }
 
@@ -295,42 +298,51 @@ class _HomeScreenState extends State<HomeScreen> {
     return tokens.join(' ').trim();
   }
 
-  /// Navigation drawer: matches + legal/about entries.
+  /// Navigation drawer: matches + language + legal/about entries.
   Widget _buildDrawer() {
+    final l = AppLocalizations.of(context);
     return Drawer(
       child: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(color: Color(0xFF1B5E20)),
+            DrawerHeader(
+              decoration: const BoxDecoration(color: Color(0xFF1B5E20)),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.sports_soccer, color: Colors.white, size: 40),
-                  SizedBox(height: 8),
-                  Text(
+                  const Icon(Icons.sports_soccer, color: Colors.white, size: 40),
+                  const SizedBox(height: 8),
+                  const Text(
                     'Kickora',
                     style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
                   ),
-                  Text('Live sports & TV', style: TextStyle(color: Colors.white70)),
+                  Text(l.appTagline, style: const TextStyle(color: Colors.white70)),
                 ],
               ),
             ),
             ListTile(
               leading: const Icon(Icons.sports_soccer),
-              title: const Text("Today's Football"),
-              subtitle: const Text('Matches scheduled today'),
+              title: Text(l.drawerTodayFootball),
+              subtitle: Text(l.drawerMatchesToday),
               onTap: () {
                 Navigator.of(context).pop(); // close drawer
                 _showFixtures();
               },
             ),
+            ListTile(
+              leading: const Icon(Icons.language),
+              title: Text(l.language),
+              onTap: () {
+                Navigator.of(context).pop();
+                _showLanguagePicker();
+              },
+            ),
             const Divider(),
             ListTile(
               leading: const Icon(Icons.privacy_tip_outlined),
-              title: const Text('Privacy Policy'),
+              title: Text(l.privacyPolicy),
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.of(context).push(
@@ -340,8 +352,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             ListTile(
               leading: const Icon(Icons.info_outline),
-              title: const Text('About'),
-              subtitle: Text(_version.isEmpty ? '' : 'Version $_version'),
+              title: Text(l.about),
+              subtitle: Text(_version.isEmpty ? '' : l.versionLabel(_version)),
               onTap: () {
                 Navigator.of(context).pop();
                 _showAbout();
@@ -351,7 +363,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Padding(
               padding: const EdgeInsets.all(16),
               child: Text(
-                'Made by Istiaq Ahmed${_version.isEmpty ? '' : ' • v$_version'}',
+                '${l.madeBy}${_version.isEmpty ? '' : ' • v$_version'}',
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ),
@@ -361,20 +373,49 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  /// Language switcher: System (follow device) / English / বাংলা.
+  void _showLanguagePicker() {
+    final current = localeNotifier.value?.languageCode;
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheetCtx) {
+        Widget tile(String label, String? code) => RadioListTile<String?>(
+              value: code,
+              groupValue: current,
+              title: Text(label),
+              onChanged: (_) {
+                setAppLocale(code == null ? null : Locale(code));
+                Navigator.of(sheetCtx).pop();
+              },
+            );
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              tile('System', null),
+              tile('English', 'en'),
+              tile('বাংলা', 'bn'),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   void _showAbout() {
+    final l = AppLocalizations.of(context);
     showAboutDialog(
       context: context,
       applicationName: 'Kickora',
-      applicationVersion: _version.isEmpty ? null : 'Version $_version',
+      applicationVersion: _version.isEmpty ? null : l.versionLabel(_version),
       applicationIcon: const Icon(Icons.sports_soccer, size: 40, color: Color(0xFF1B5E20)),
       applicationLegalese: '© 2026 Istiaq Ahmed',
-      children: const [
-        SizedBox(height: 12),
-        Text('Kickora is a free live-TV and sports aggregator built by '
-            'Istiaq Ahmed, an independent Flutter developer.'),
-        SizedBox(height: 12),
-        Text('Channels stream from third-party providers. Kickora does not '
-            'host or own any content.'),
+      children: [
+        const SizedBox(height: 12),
+        Text(l.aboutBody1),
+        const SizedBox(height: 12),
+        Text(l.aboutBody2),
       ],
     );
   }
@@ -382,6 +423,7 @@ class _HomeScreenState extends State<HomeScreen> {
   /// Bottom sheet listing today's football matches (TheSportsDB). Tapping a
   /// match jumps to the Sports category so the user can pick the broadcaster.
   void _showFixtures() {
+    final l = AppLocalizations.of(context);
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -395,15 +437,15 @@ class _HomeScreenState extends State<HomeScreen> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(16, 4, 16, 12),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
                   child: Row(
                     children: [
-                      Icon(Icons.sports_soccer),
-                      SizedBox(width: 8),
+                      const Icon(Icons.sports_soccer),
+                      const SizedBox(width: 8),
                       Text(
-                        "Today's Football",
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        l.fixturesTitle,
+                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -420,7 +462,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Padding(
                             padding: const EdgeInsets.all(24),
                             child: Text(
-                              "Couldn't load fixtures.\n${snap.error}",
+                              l.fixturesLoadError('${snap.error}'),
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -428,7 +470,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       }
                       final list = snap.data ?? const [];
                       if (list.isEmpty) {
-                        return const Center(child: Text('No football listed for today.'));
+                        return Center(child: Text(l.fixturesEmpty));
                       }
                       return ListView.separated(
                         controller: scrollController,
@@ -466,7 +508,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _category = 'Sports';
       _group = 'All';
     });
-    _toast('Showing Sports channels for “${f.title}”. Pick a broadcaster.');
+    _toast(AppLocalizations.of(context).showingSportsFor(f.title));
   }
 
   void _toast(String msg) {
@@ -495,14 +537,14 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           if (!_loading && _loadError == null) ...[
             IconButton(
-              tooltip: 'Show online only',
+              tooltip: AppLocalizations.of(context).showOnlineOnly,
               isSelected: _onlineOnly,
               icon: const Icon(Icons.wifi_tethering_off),
               selectedIcon: const Icon(Icons.wifi_tethering),
               onPressed: () => setState(() => _onlineOnly = !_onlineOnly),
             ),
             IconButton(
-              tooltip: 'Health-check visible channels',
+              tooltip: AppLocalizations.of(context).healthCheck,
               icon: _checking
                   ? const SizedBox(
                       width: 18,
@@ -533,7 +575,12 @@ class _HomeScreenState extends State<HomeScreen> {
       return const Center(child: CircularProgressIndicator());
     }
     if (_loadError != null) {
-      return Center(child: Text('Failed to load playlist:\n$_loadError', textAlign: TextAlign.center));
+      return Center(
+        child: Text(
+          AppLocalizations.of(context).loadFailed(_loadError!),
+          textAlign: TextAlign.center,
+        ),
+      );
     }
 
     final player = PlayerPanel(
@@ -577,11 +624,11 @@ class _HomeScreenState extends State<HomeScreen> {
         Padding(
           padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
           child: TextField(
-            decoration: const InputDecoration(
-              prefixIcon: Icon(Icons.search),
-              hintText: 'Search channels…',
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.search),
+              hintText: AppLocalizations.of(context).searchHint,
               isDense: true,
-              border: OutlineInputBorder(),
+              border: const OutlineInputBorder(),
             ),
             onChanged: (v) => setState(() => _query = v),
           ),
@@ -630,7 +677,7 @@ class _HomeScreenState extends State<HomeScreen> {
         const Divider(height: 16),
         Expanded(
           child: filtered.isEmpty
-              ? const Center(child: Text('No channels match'))
+              ? Center(child: Text(AppLocalizations.of(context).noChannelsMatch))
               : ListView.builder(
                   itemCount: filtered.length,
                   itemBuilder: (_, i) {

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 
+import '../l10n/app_localizations.dart';
 import '../models/channel.dart';
 
 /// Video surface + live status overlay (buffering / error / now-playing).
@@ -103,7 +104,7 @@ class _PlayerPanelState extends State<PlayerPanel> {
     _watchdog = Timer(_stallTimeout, () {
       if (!mounted) return;
       if (!widget.player.state.playing) {
-        setState(() => _error ??= 'Stream timed out');
+        setState(() => _error ??= AppLocalizations.of(context).streamTimedOut);
         _fail();
       }
     });
@@ -202,16 +203,12 @@ class _QualityMenu extends StatelessWidget {
 
   bool get _isAuto => active == null || active!.id == 'auto';
 
-  String get _currentLabel {
-    final a = active;
-    if (a == null || a.id == 'auto') return 'Auto';
-    return labelOf(a);
-  }
-
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final currentLabel = _isAuto ? l.qualityAuto : labelOf(active!);
     return PopupMenuButton<String>(
-      tooltip: 'Quality',
+      tooltip: l.quality,
       color: Colors.black87,
       onSelected: (id) {
         if (id == 'auto') {
@@ -225,7 +222,7 @@ class _QualityMenu extends StatelessWidget {
         CheckedPopupMenuItem<String>(
           value: 'auto',
           checked: _isAuto,
-          child: const Text('Auto', style: TextStyle(color: Colors.white)),
+          child: Text(l.qualityAuto, style: const TextStyle(color: Colors.white)),
         ),
         for (final t in tracks)
           CheckedPopupMenuItem<String>(
@@ -246,7 +243,7 @@ class _QualityMenu extends StatelessWidget {
             const Icon(Icons.hd, color: Colors.white, size: 16),
             const SizedBox(width: 6),
             Text(
-              _currentLabel,
+              currentLabel,
               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
             ),
           ],
@@ -287,15 +284,15 @@ class _EmptyState extends StatelessWidget {
   const _EmptyState();
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.sports_soccer, color: Colors.white24, size: 72),
-          SizedBox(height: 12),
+          const Icon(Icons.sports_soccer, color: Colors.white24, size: 72),
+          const SizedBox(height: 12),
           Text(
-            'Pick a channel to start watching',
-            style: TextStyle(color: Colors.white54, fontSize: 16),
+            AppLocalizations.of(context).pickChannel,
+            style: const TextStyle(color: Colors.white54, fontSize: 16),
           ),
         ],
       ),
@@ -310,6 +307,7 @@ class _ErrorState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return Container(
       color: Colors.black87,
       padding: const EdgeInsets.all(16),
@@ -320,13 +318,13 @@ class _ErrorState extends StatelessWidget {
             children: [
               const Icon(Icons.error_outline, color: Colors.orangeAccent, size: 48),
               const SizedBox(height: 10),
-              const Text(
-                'Stream unavailable',
-                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+              Text(
+                l.streamUnavailable,
+                style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 6),
               Text(
-                'This source may be offline or geo-blocked. Try another.',
+                l.streamUnavailableHint,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white.withValues(alpha: 0.6)),
               ),
@@ -334,7 +332,7 @@ class _ErrorState extends StatelessWidget {
               FilledButton.icon(
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh),
-                label: const Text('Retry'),
+                label: Text(l.retry),
               ),
             ],
           ),

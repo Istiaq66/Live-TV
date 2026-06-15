@@ -9,6 +9,7 @@ class PreferencesService {
 
   static const _kFavorites = 'favorites';
   static const _kLastWatched = 'last_watched';
+  static const _kLocale = 'locale_code';
 
   final SharedPreferences _prefs;
 
@@ -25,4 +26,11 @@ class PreferencesService {
 
   Future<void> saveLastWatched(String url) =>
       _prefs.setString(_kLastWatched, url);
+
+  /// Saved UI language code (e.g. 'en', 'bn'), or null to follow the system.
+  String? localeCode() => _prefs.getString(_kLocale);
+
+  Future<void> saveLocaleCode(String? code) => code == null
+      ? _prefs.remove(_kLocale)
+      : _prefs.setString(_kLocale, code);
 }

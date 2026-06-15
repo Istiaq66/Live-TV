@@ -1,0 +1,57 @@
+{
+  "@@locale": "en",
+  "appName": "Kickora",
+  "appTagline": "Live sports & TV",
+
+  "showOnlineOnly": "Show online only",
+  "healthCheck": "Health-check visible channels",
+  "searchHint": "Search channels…",
+  "noChannelsMatch": "No channels match",
+  "loadFailed": "Failed to load playlist:\n{error}",
+  "@loadFailed": {
+    "placeholders": { "error": { "type": "String" } }
+  },
+
+  "drawerTodayFootball": "Today's Football",
+  "drawerMatchesToday": "Matches scheduled today",
+  "privacyPolicy": "Privacy Policy",
+  "about": "About",
+  "versionLabel": "Version {version}",
+  "@versionLabel": {
+    "placeholders": { "version": { "type": "String" } }
+  },
+  "madeBy": "Made by Istiaq Ahmed",
+  "language": "Language",
+
+  "aboutBody1": "Kickora is a free live-TV and sports aggregator built by Istiaq Ahmed, an independent Flutter developer.",
+  "aboutBody2": "Channels stream from third-party providers. Kickora does not host or own any content.",
+
+  "fixturesTitle": "Today's Football",
+  "fixturesLoadError": "Couldn't load fixtures.\n{error}",
+  "@fixturesLoadError": {
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "fixturesEmpty": "No football listed for today.",
+
+  "pickChannel": "Pick a channel to start watching",
+  "streamUnavailable": "Stream unavailable",
+  "streamUnavailableHint": "This source may be offline or geo-blocked. Try another.",
+  "retry": "Retry",
+  "quality": "Quality",
+  "qualityAuto": "Auto",
+  "streamTimedOut": "Stream timed out",
+
+  "noWorkingSource": "No working source found. Try Health-check (top-right).",
+  "sourceDownNoOther": "“{name}” is down — no other source available.",
+  "@sourceDownNoOther": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "sourceDownTryingAnother": "“{name}” down — trying another source…",
+  "@sourceDownTryingAnother": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "showingSportsFor": "Showing Sports channels for “{match}”. Pick a broadcaster.",
+  "@showingSportsFor": {
+    "placeholders": { "match": { "type": "String" } }
+  }
+}

@@ -14,7 +14,7 @@ enum StreamStatus { unknown, checking, online, offline }
 /// these servers don't implement it. A 2xx/3xx response (and, for `.m3u8`,
 /// playlist-looking content) counts as online.
 class StreamHealthChecker {
-  StreamHealthChecker({this.timeout = const Duration(seconds: 7)});
+  StreamHealthChecker({this.timeout = const Duration(seconds: 12)});
 
   final Duration timeout;
 

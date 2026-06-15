@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart' show rootBundle;
 
+import '../config.dart';
 import '../models/channel.dart';
 import 'm3u_parser.dart';
 
@@ -13,6 +14,9 @@ class PlaylistRepository {
 
   Future<List<Channel>> loadChannels() async {
     final raw = await rootBundle.loadString(_assetPath);
-    return M3uParser.parse(raw);
+    final channels = M3uParser.parse(raw);
+    // Drop channels that can't play on the current platform (web hides
+    // BD-geo-locked hosts; native keeps everything).
+    return channels.where((c) => isPlayableHere(c.url)).toList();
   }
 }

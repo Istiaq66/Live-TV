@@ -16,6 +16,7 @@ class PlayerPanel extends StatefulWidget {
     required this.channel,
     required this.onRetry,
     this.onError,
+    this.onPlaying,
   });
 
   final Player player;
@@ -25,6 +26,10 @@ class PlayerPanel extends StatefulWidget {
 
   /// Fired once per channel when playback errors — lets the parent auto-skip.
   final VoidCallback? onError;
+
+  /// Fired when the current channel actually starts playing — the only
+  /// trustworthy "this stream works" signal (a URL responding isn't enough).
+  final VoidCallback? onPlaying;
 
   @override
   State<PlayerPanel> createState() => _PlayerPanelState();
@@ -76,11 +81,12 @@ class _PlayerPanelState extends State<PlayerPanel> {
       setState(() => _error = e);
       _fail();
     }));
-    // Playback started → cancel watchdog + clear any stale error.
+    // Playback started → cancel watchdog, clear stale error, mark working.
     _subs.add(widget.player.stream.playing.listen((p) {
       if (!p) return;
       _watchdog?.cancel();
       if (mounted && _error != null) setState(() => _error = null);
+      widget.onPlaying?.call();
     }));
     // Resolution variants exposed by the current source.
     _subs.add(widget.player.stream.tracks.listen((t) {

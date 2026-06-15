@@ -16,6 +16,27 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 ///   const kStreamProxyBase = 'https://drishto-proxy.yourname.workers.dev';
 const String kStreamProxyBase = 'https://drishto-proxy.ahmedboby66.workers.dev';
 
+/// Stream hosts that cannot work on the web build: they geo-restrict to
+/// Bangladesh (the proxy egresses from Cloudflare's non-BD edge → 403/522) or
+/// serve expired-token URLs that 404. Channels on these hosts are hidden on web
+/// only — native builds (run from BD) still play them fine.
+const List<String> _webBlockedHosts = [
+  'aynaott.com',
+  'bozztv.com',
+  'ncare.live',
+  'jagobd.com',
+  'gpcdn.net',
+  'raytahost.com',
+];
+
+/// Whether [url] is worth showing on the current platform. Always true on
+/// native; on web, false for hosts known to be unplayable there.
+bool isPlayableHere(String url) {
+  if (!kIsWeb) return true;
+  final host = Uri.tryParse(url)?.host.toLowerCase() ?? '';
+  return !_webBlockedHosts.any(host.contains);
+}
+
 /// Routes [url] through the CORS proxy when running on web and a proxy is
 /// configured; returns [url] unchanged on native or when no proxy is set.
 ///

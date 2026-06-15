@@ -58,6 +58,9 @@ class _HomeScreenState extends State<HomeScreen> {
   String _query = '';
   String _category = 'All';
   String _group = 'All';
+  // Never auto-hide by the probe — it has false negatives (rejects working
+  // streams). Users opt in via the toolbar toggle; status fills in from real
+  // playback + manual health-check.
   bool _onlineOnly = false;
 
   // Auto-skip bookkeeping: sources already attempted in the current tune, and a
@@ -129,6 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
         final match = channels.where((c) => c.url == lastUrl);
         if (match.isNotEmpty) _play(match.first);
       }
+
     } catch (e) {
       if (!mounted) return;
       setState(() {
@@ -240,8 +244,11 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() => _current = channel);
     // Low-latency live tuning; mpv handles HLS + raw mpegts transparently.
     // Pass per-stream HTTP headers (UA/Referer/Origin) so origins that 403
-    // without them still play.
-    _player.open(_mediaFor(channel));
+    // without them still play. play:true autostarts; the extra play() consumes
+    // the tap's user-activation so browsers don't leave it paused on web.
+    _player.open(_mediaFor(channel), play: true).then((_) {
+      if (mounted) _player.play();
+    });
     _prefs?.saveLastWatched(channel.url);
   }
 
@@ -254,6 +261,16 @@ class _HomeScreenState extends State<HomeScreen> {
         proxiedUrl(c.url, c.headers),
         httpHeaders: c.headers.isEmpty ? null : c.headers,
       );
+
+  /// Current channel actually started playing → mark it online for real. This
+  /// is the authoritative signal; the health-check probe is only a guess.
+  void _onStreamPlaying() {
+    final c = _current;
+    if (c == null) return;
+    if (_status[c.url] != StreamStatus.online) {
+      setState(() => _status[c.url] = StreamStatus.online);
+    }
+  }
 
   /// Called when the player reports a playback error: mark the source offline
   /// and hop to the next viable source for the same channel / group.
@@ -612,6 +629,7 @@ class _HomeScreenState extends State<HomeScreen> {
       channel: _current,
       onRetry: _retry,
       onError: _onStreamError,
+      onPlaying: _onStreamPlaying,
     );
 
     if (wide) {

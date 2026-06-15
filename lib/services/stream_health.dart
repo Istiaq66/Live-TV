@@ -16,7 +16,7 @@ class StreamHealthChecker {
 
   final Duration timeout;
 
-  Future<bool> isAlive(String url) async {
+  Future<bool> isAlive(String url, {Map<String, String> headers = const {}}) async {
     final uri = Uri.tryParse(url);
     if (uri == null || !uri.hasScheme) return false;
 
@@ -27,6 +27,9 @@ class StreamHealthChecker {
         ..headers['Range'] = 'bytes=0-1'
         ..headers['User-Agent'] = 'VLC/3.0.20 LibVLC/3.0.20'
         ..headers['Accept'] = '*/*';
+      // Per-stream headers (UA/Referer/Origin) override the defaults so a
+      // header-gated origin isn't wrongly probed as offline.
+      headers.forEach((k, v) => req.headers[k] = v);
 
       final resp = await client.send(req).timeout(timeout);
       final ok = resp.statusCode >= 200 && resp.statusCode < 400;
@@ -68,6 +71,7 @@ class StreamHealthChecker {
   Future<void> checkAll(
     Iterable<String> urls, {
     required void Function(String url, bool alive) onResult,
+    Map<String, Map<String, String>> headers = const {},
     int concurrency = 8,
   }) async {
     final queue = urls.toList();
@@ -78,7 +82,7 @@ class StreamHealthChecker {
         final i = index++;
         if (i >= queue.length) return;
         final url = queue[i];
-        final alive = await isAlive(url);
+        final alive = await isAlive(url, headers: headers[url] ?? const {});
         onResult(url, alive);
       }
     }

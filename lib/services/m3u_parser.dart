@@ -141,6 +141,11 @@ class M3uParser {
 
   // Order matters: first match wins.
   static const Map<String, List<String>> _groupKeywords = {
+    // Bangladesh sports broadcasters — keep first so their mirrors group
+    // together and auto-skip can hop between servers of the same channel.
+    'T Sports': ['T SPORTS', 'TSPORTS'],
+    'Gazi TV': ['GAZI', 'GTV'],
+    'Maasranga': ['MAASRANGA', 'MASRANGA'],
     'ESPN': ['ESPN'],
     'beIN': ['BEIN'],
     'DAZN': ['DAZN'],

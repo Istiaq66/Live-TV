@@ -18,10 +18,10 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   // media_kit player + render controller. Created once, reused for every zap.
-  // Bigger demuxer buffer absorbs jitter on high-latency / overseas links so
-  // playback rebuffers less often (trades a slightly longer initial load).
+  // Moderate demuxer buffer: enough to absorb jitter on overseas links without
+  // the long initial fill / long rebuffer a huge buffer forces on live streams.
   late final Player _player = Player(
-    configuration: const PlayerConfiguration(bufferSize: 64 * 1024 * 1024),
+    configuration: const PlayerConfiguration(bufferSize: 16 * 1024 * 1024),
   );
   late final VideoController _controller = VideoController(_player);
 
@@ -61,16 +61,19 @@ class _HomeScreenState extends State<HomeScreen> {
     _load();
   }
 
-  /// Tune libmpv for laggy live streams: read further ahead and keep a deeper
-  /// cache so transient network jitter doesn't stall playback, and don't wait
-  /// forever on a dead host.
+  /// Tune libmpv for live streams. Keep readahead/cache short so the first
+  /// frame appears fast and a stall refills quickly (a deep cache makes both
+  /// the initial load and every rebuffer long). Still enough slack to ride out
+  /// normal jitter; don't wait forever on a dead host.
   Future<void> _tunePlayer() async {
     final p = _player.platform;
     if (p is! NativePlayer) return;
     await p.setProperty('cache', 'yes');
-    await p.setProperty('demuxer-readahead-secs', '30');
-    await p.setProperty('cache-secs', '30');
-    await p.setProperty('network-timeout', '15');
+    await p.setProperty('demuxer-readahead-secs', '10');
+    await p.setProperty('cache-secs', '10');
+    // Resume as soon as a small amount is buffered instead of refilling fully.
+    await p.setProperty('cache-pause-wait', '1');
+    await p.setProperty('network-timeout', '10');
   }
 
   Future<void> _load() async {

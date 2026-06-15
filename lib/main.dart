@@ -54,6 +54,9 @@ class LiveTvApp extends StatelessWidget {
               brightness: Brightness.dark,
             ),
             useMaterial3: true,
+            // Bengali glyphs aren't in the default web font — fall back to the
+            // bundled Noto Sans Bengali so বাংলা renders everywhere.
+            fontFamilyFallback: const ['NotoSansBengali'],
           ),
           home: const HomeScreen(),
         );

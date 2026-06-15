@@ -1,138 +1,153 @@
 #EXTM3U
-#EXTINF:-1 tvg-id="AamarBangla.in@SD" tvg-logo="https://jiotvimages.cdn.jio.com/dare_images/images/Amaar_Bangla.png" group-title="Entertainment",Aamar Bangla (720p) 🇧🇩
-https://app.ncare.live/c3VydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI/amarbanglatv.stream/playlist.m3u8
-#EXTINF:-1 tvg-id="AnandaTV.bd@SD" tvg-logo="https://i.imgur.com/jkbo7Qe.png" group-title="Entertainment",Ananda TV (1080p) 🇧🇩
-#EXTVLCOPT:http-referrer=https://bozztv.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://bozztv.com/rongo/rongo-AnandaTV/index.m3u8
-#EXTINF:-1 tvg-id="AsianTV.bd@SD" tvg-logo="https://i.imgur.com/k2adSjA.png" group-title="Entertainment",Asian TV (720p) 🇧🇩
-#EXTVLCOPT:http-referrer=https://aynaott.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://tvsen6.aynaott.com/asiantv/index.m3u8
-#EXTINF:-1 tvg-id="ATNBangla.bd@SD" tvg-logo="https://i.imgur.com/K1HmMRz.png" group-title="General",ATN Bangla (720p) 🇧🇩
-#EXTVLCOPT:http-referrer=https://aynaott.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://tvsen5.aynaott.com/atnbangla/index.m3u8
-#EXTINF:-1 tvg-id="ATNMusic.bd@SD" tvg-logo="https://www.jagobd.com/wp-content/uploads/2015/12/atnmusic.jpg?x50681" group-title="Music",ATN Music (360p) 🇧🇩
-https://app.ncare.live/c3VydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI/atnmusic.stream/playlist.m3u8
-#EXTINF:-1 tvg-id="BanglaTV.bd@SD" tvg-logo="https://i.imgur.com/DLGjTfI.png" group-title="General",Bangla TV (720p) 🇧🇩
-#EXTVLCOPT:http-referrer=https://aynaott.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://tvsen6.aynaott.com/banglatv/index.m3u8
-#EXTINF:-1 tvg-id="BanglaVision.bd@SD" tvg-logo="https://i.imgur.com/nCWgp38.png" group-title="General",Bangla Vision (1080p) 🇧🇩
-https://owrcovcrpy.gpcdn.net/bpk-tv/1715/output/index.m3u8
-#EXTINF:-1 tvg-id="BijoyTV.bd@SD" tvg-logo="https://i.imgur.com/Faetm0C.png" group-title="News",Bijoy TV (720p) 🇧🇩
-#EXTVLCOPT:http-referrer=https://aynaott.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://tvsen6.aynaott.com/bijoytv/index.m3u8
-#EXTINF:-1 tvg-id="BoishakhiTV.bd@SD" tvg-logo="https://i.imgur.com/gxL05Y4.png" group-title="General",Boishakhi TV (720p) 🇧🇩
-#EXTVLCOPT:http-referrer=https://aynaott.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://tvsen6.aynaott.com/boishakhitv/index.m3u8
-#EXTINF:-1 tvg-id="BTVChattogram.bd@SD" tvg-logo="https://i.imgur.com/hvpyuek.png" group-title="Undefined",BTV Chattogram (1080p) 🇧🇩
-#EXTVLCOPT:http-referrer=https://bozztv.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://bozztv.com/rongo/rongo-BTVChattagram/index.m3u8
-#EXTINF:-1 tvg-id="BTVNational.bd@SD" tvg-logo="https://i.imgur.com/5OE2FDt.png" group-title="Undefined",BTV National (1080p) 🇧🇩
-https://owrcovcrpy.gpcdn.net/bpk-tv/1709/output/1709.m3u8
-#EXTINF:-1 tvg-id="BTVNews.bd@SD" tvg-logo="https://www.btvlive.gov.bd/_next/image?url=https%3A%2F%2Fd38ll44lbmt52p.cloudfront.net%2Fcms%2Fchannel_poster%2F1735648543857_Poster.jpg&w=3840&q=75" group-title="Undefined",BTV News (720p) 🇧🇩
-#EXTVLCOPT:http-referrer=https://aynaott.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://tvsen6.aynaott.com/BTVNews/index.m3u8
-#EXTINF:-1 tvg-id="Channel9.bd@SD" tvg-logo="https://i.imgur.com/Xf5YuoE.png" group-title="General",Channel 9 (1080p) 🇧🇩
-https://owrcovcrpy.gpcdn.net/bpk-tv/1729/output/index.m3u8
-#EXTINF:-1 tvg-id="Channel24.bd@SD" tvg-logo="https://i.imgur.com/4JLkaF7.png" group-title="News",Channel 24 (1080p) 🇧🇩
-#EXTVLCOPT:http-referrer=https://bozztv.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://bozztv.com/rongo/rongo-Channel24HD/index.m3u8
-#EXTINF:-1 tvg-id="ChannelI.bd@SD" tvg-logo="https://i.imgur.com/X0JJlOX.png" group-title="General",Channel I (1080p) 🇧🇩
-https://owrcovcrpy.gpcdn.net/bpk-tv/1723/output/index.m3u8
-#EXTINF:-1 tvg-id="ChannelS.uk@SD" tvg-logo="https://i.imgur.com/hJxFLvF.png" group-title="Culture",Channel S (576p) 🇧🇩
-https://app.ncare.live/c3VydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI/chsukoff.stream/playlist.m3u8
-#EXTINF:-1 tvg-id="DBCNews.bd@SD" tvg-logo="https://i.imgur.com/Qbt6q4z.png" group-title="News",DBC News (1080p) 🇧🇩
-https://owrcovcrpy.gpcdn.net/bpk-tv/1728/output/index.m3u8
-#EXTINF:-1 tvg-id="DeeptoTV.bd@SD" tvg-logo="https://i.imgur.com/F62GUqS.png" group-title="Entertainment",Deepto TV (1080p) 🇧🇩
-https://owrcovcrpy.gpcdn.net/bpk-tv/1711/output/index.m3u8
+# --- Bangladesh (maintained via github.com/lupael/IPTV) ---
+#EXTINF:-1 group-title="Movies",&Flix HD 🇮🇳
+http://z5amshls.akamaized.net/andflixhd/tracks-v1a1/index.m3u8
+#EXTINF:-1 group-title="Movies",&Pictures 🇮🇳
+http://z5amshls.akamaized.net/andpicssd/tracks-v1a1/index.m3u8
+#EXTINF:-1 group-title="Movies",&Pictures HD 🇮🇳
+http://z5amshls.akamaized.net/andpicshd/tracks-v1a1/index.m3u8
+#EXTINF:-1 group-title="Movies",&Prive HD 🇮🇳
+http://z5amshls.akamaized.net/andprivehd/tracks-v1a1/index.m3u8
+#EXTINF:-1 group-title="Entertainment",Ananda TV 🇧🇩
+http://103.43.148.202:1934/cZVydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZT00U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI/anandatv.stream/chunks.m3u8
+#EXTINF:-1 group-title="Entertainment",Asian TV 🇧🇩
+https://raw.githubusercontent.com/amarnettv/amarnettv.github.io/master/amarnettvFree.mp4
+#EXTINF:-1 group-title="Entertainment",ATN Bangla 🇧🇩
+http://103.43.148.202:1934/cZVydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZT00U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI/atnbd-8-org.stream/chunks.m3u8?@amarnettv.live
+#EXTINF:-1 group-title="News",ATN News 🇧🇩
+https://raw.githubusercontent.com/amarnettv/amarnettv.github.io/master/amarnettvFree.mp4
+#EXTINF:-1 group-title="Entertainment",Bangla TV 🇧🇩
+http://103.43.148.202:1934/cZVydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZT00U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI/banglatvhd.stream/chunks.m3u8
+#EXTINF:-1 group-title="Entertainment",Bangla Vision 🇧🇩
+http://103.43.148.202:1934/cZVydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZT00U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI/banglav000.stream/chunks.m3u8?@amarnettv.live
+#EXTINF:-1 group-title="News",Bijoy TV 🇧🇩
+http://103.43.148.202:1934/cZVydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZT00U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI/bijoy00.stream/chunks.m3u8
+#EXTINF:-1 group-title="Entertainment",Boishakhi TV 🇧🇩
+https://raw.githubusercontent.com/amarnettv/amarnettv.github.io/master/amarnettvFree.mp4
+#EXTINF:-1 group-title="Entertainment",BTV National 🇧🇩
+http://103.43.148.202:1934/cZVydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZT00U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI/btv-local-sg-220-org.stream/chunks.m3u8
+#EXTINF:-1 group-title="Entertainment",BTV Chattogram 🇧🇩
+http://103.43.148.202:1934/cZVydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZT00U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI/btvnational-ctg.stream/chunks.m3u8?@amarnettv.live
+#EXTINF:-1 group-title="News",BTV World 🇧🇩
+https://dl.dropbox.com/d/3ibldsv73pdt0ta/amarnettvFree.mp4
+#EXTINF:-1 group-title="News",Channel 24 🇧🇩
+http://103.43.148.202:1934/cZVydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZT00U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI/channel24-sg-e8e.stream/chunks.m3u8
+#EXTINF:-1 group-title="Entertainment",Channel 9 🇧🇩
+http://103.43.148.202:1934/cZVydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZT00U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI/channel9hd.stream/chunks.m3u8?@amarnettv.live
+#EXTINF:-1 group-title="Entertainment",Channel i 🇧🇩
+http://103.43.148.202:1934/cZVydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZT00U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI/channeli-8-org.stream/chunks.m3u8?@amarnettv.live
+#EXTINF:-1 group-title="Entertainment",Channel S 🇧🇩
+http://23.106.120.42:1934/c2VydmVyX4RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI/channelsbd.stream/live-orgin/channelsbd.stream/chunks.m3u8
+#EXTINF:-1 group-title="Entertainment",Channel S UK 🇧🇩
+http://103.43.148.202:1934/cZVydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZT00U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI/chsukoff.stream/chunks.m3u8
+#EXTINF:-1 group-title="News",Channel 9 News 🇧🇩
+https://d39iawgzv3h0yo.cloudfront.net/out/v1/1ef4344a3b4a41908915d58ac7bd5e23/index_14.m3u8
+#EXTINF:-1 group-title="News",DBC News 🇧🇩
+https://raw.githubusercontent.com/amarnettv/amarnettv.github.io/master/amarnettvFree.mp4
+#EXTINF:-1 group-title="Entertainment",Deepto TV 🇧🇩
+https://edge01.iptv.digijadoo.net/live/deepto_tv/chunks.m3u8
+#EXTINF:-1 group-title="News",Desh TV 🇧🇩
+https://edge01.iptv.digijadoo.net/live/desh_tv/chunks.m3u8?@amarnettv.live
+#EXTINF:-1 group-title="Kids",Duronto TV 🇧🇩
+https://edge01.iptv.digijadoo.net/live/duronto_tv/chunks.m3u8
+#EXTINF:-1 group-title="News",Ekattor TV 🇧🇩
+http://iptv.kitv.live:1935/live/CTGDDN/CTGDDN/21.ts
+#EXTINF:-1 group-title="News",Ekushey TV (ETV) 🇧🇩
+https://edge01.iptv.digijadoo.net/live/ekushey_tv/chunks.m3u8?@amarnettv.live
+#EXTINF:-1 group-title="Entertainment",Enter10 Bangla 🇧🇩
+http://streamitv.multitvsolution.in/idvo/enter10bangla_540p/index.m3u8
+#EXTINF:-1 group-title="Sports",Gazi TV (GTV) 🇧🇩
+https://edge01.iptv.digijadoo.net/live/gazi_tv/chunks.m3u8
+#EXTINF:-1 group-title="Movies",HBO
+https://liveorigin01.hbogoasia.com:8443/origin/live/main/HBO/1.m3u8?token=Zalogi
+#EXTINF:-1 group-title="Movies",HBO Family
+https://liveorigin01.hbogoasia.com:8443/origin/live/main/FAMILY/1.m3u8?token=Zalogi
+#EXTINF:-1 group-title="Movies",HBO Hits
+https://liveorigin01.hbogoasia.com:8443/origin/live/main/HITS/1.m3u8?token=Zalogi
+#EXTINF:-1 group-title="Movies",HBO Signature
+https://liveorigin01.hbogoasia.com:8443/origin/live/main/SIG/1.m3u8?token=Zalogi
+#EXTINF:-1 group-title="Entertainment",HGTV
+http://103.47.132.164/PLTV/88888888/224/3221227035/index.m3u8
+#EXTINF:-1 group-title="News",Independent TV 🇧🇩
+http://103.43.148.202:1934/cZVydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZT00U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI/independent-8-org.stream/chunks.m3u8
+#EXTINF:-1 group-title="Sports",IPL Cricket
+https://manifest.googlevideo.com/api/manifest/hls_variant/expire/1600716891/ei/-qtoX6GmPOz14-EP9PiU-AE/ip/103.120.194.32/id/tn1NdI3TqxE.0/source/yt_live_broadcast/requiressl/yes/hfr/1/maxh/1080/maudio/1/gcr/bd/vprv/1/go/1/keepalive/yes/dover/11/itag/0/playlist_type/LIVE/sparams/expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Chfr%2Cmaxh%2Cmaudio%2Cgcr%2Cvprv%2Cgo%2Citag%2Cplaylist_type/sig/AOq0QJ8wRQIhAMOPxHVU3H0a3UcBTuLsD0I0xD9gBizV_qT9UzSCSvvJAiBtaGryxeKh3SlKpi7-2jc44nXoF_gFSeuwxZH7g-PkUw%3D%3D/file/index.m3u8
+#EXTINF:-1 group-title="Entertainment",Zee Bangla / Jalsha 🇮🇳
+http://103.205.133.19/hls/chsj.m3u8
+#EXTINF:-1 group-title="Entertainment",Jalsha 2 🇮🇳
+http://aklivetv.com:8080/starjalsha/tracks-v1a1/mono.m3u8
+#EXTINF:-1 group-title="Entertainment",Jalsha HD 🇮🇳
+http://iptv.kitv.live:1935/live/CTGDDN/CTGDDN/22.ts
+#EXTINF:-1 group-title="Movies",Jalsha Movies HD 🇮🇳
+http://103.135.208.14/live/ibox/bd/39.m3u8
+#EXTINF:-1 group-title="News",Jamuna TV 🇧🇩
+http://103.43.148.202:1934/cZVydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZT00U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI/jamuna-test-sample-ok.stream/chunks.m3u8
+#EXTINF:-1 group-title="Sports",Maasranga TV 🇧🇩
+https://edge01.iptv.digijadoo.net/live/maasranga/chunks.m3u8
+#EXTINF:-1 group-title="Entertainment",Mohona TV 🇧🇩
+https://raw.githubusercontent.com/amarnettv/amarnettv.github.io/master/amarnettvFree.mp4
+#EXTINF:-1 group-title="Entertainment",My TV 🇧🇩
+http://103.43.148.202:1934/cZVydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZT00U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI/mytv-up-off.stream/chunks.m3u8?@amarnettv.live
+#EXTINF:-1 group-title="Entertainment",Nagorik TV 🇧🇩
+http://iptv.kitv.live:1935/live/CTGDDN/CTGDDN/3.ts
+#EXTINF:-1 group-title="News",News24 🇧🇩
+http://103.43.148.202:1934/cZVydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZT00U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI/news24local.stream/chunks.m3u8
+#EXTINF:-1 group-title="Entertainment",National Geographic
+http://103.211.185.98:8082/35/index.m3u8?token=a71dfbaa793afad40c5cc837d8cd967cfb93196a-492169ede2eeeb9db2b5377f82c6fa53-1600933284-1600922484&remote=202.5.56.39
+#EXTINF:-1 group-title="Kids",Nickelodeon Bangla 🇧🇩
+http://103.211.185.98:8082/55/index.m3u8?token=f21cf6755036462af656b0106d577ef902ad8334-2df806f16dda82635b726e3b4e67ed5f-1600932525-1600921725&remote=202.5.56.39
+#EXTINF:-1 group-title="Entertainment",NTV 🇧🇩
+https://edge01.iptv.digijadoo.net/live/ntv/chunks.m3u8?@amarnettv.live
+#EXTINF:-1 group-title="Entertainment",NTV UK 🇧🇩
+http://23.106.120.42:1934/c2VydmVyX6RpbEU8Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI/ntvuk00332211.stream/live-orgin/ntvuk00332211.stream/chunks.m3u8
+#EXTINF:-1 group-title="Entertainment",Rtv 🇧🇩
+http://103.43.148.202:1934/cZVydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZT00U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI/rtv-sg.stream/playlist.m3u8
+#EXTINF:-1 group-title="Music",Sangeet Bangla 🇮🇳
+http://iptv.kitv.live:1935/live/CTGDDN/CTGDDN/70.ts
+#EXTINF:-1 group-title="Entertainment",SA TV 🇧🇩
+https://raw.githubusercontent.com/amarnettv/amarnettv.github.io/master/amarnettvFree.mp4
+#EXTINF:-1 group-title="Movies",Sony SET MAX 🇮🇳
+http://ov100.novacdn.xyz/nmbkxvrteswazx/9780854213567/6510?token=SRJYAhFRRlgVVFFXVQcDCARWX1AEBAVWUFEGUVNWVwcEBAJQWlhSBFNBHkYSRhRUUFhmW1UWXgIGAlJIEhYVB0BvWQdAA0ZQD1cGUlkQShNFXFRXEw5VAQoGUVwCUlRXHhJACgYbXgxCD15IQ1ceRVRHV1NdawBRRVoBARJZCBdeXBxBDVc7BlIOUwoFEFwTABcVEFhHFBYJXRcIXE9EAFtEQgIWXEZYWRZeCE0QBV5EW01ASBZeFnF3QEgSBh4WV15DCg1XRlgVF0FGTRAPQm5HXEFFRgFVXlYQRgpBVkAeEl0CGmYHDVkNVwcVWwlfQhcDEAAWSBZeXAwNRAwUPUJZVEFYVxEOWx4=
+#EXTINF:-1 group-title="Movies",Sony SET MAX HD 🇮🇳
+http://iptv.kitv.live:1935/live/CTGDDN/CTGDDN/31.ts
+#EXTINF:-1 group-title="News",Somoy News 🇧🇩
+http://103.43.148.202:1934/cZVydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZT00U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI/somoyt000011226615544544.stream/chunks.m3u8
+#EXTINF:-1 group-title="Entertainment",Sangsad TV 🇧🇩
+https://raw.githubusercontent.com/amarnettv/amarnettv.github.io/master/amarnettvFree.mp4
+#EXTINF:-1 group-title="Movies",Sony PIX HD
+http://103.211.185.98:8082/41/index.m3u8?token=200b3765edcadd11e39a1b1f48643451e65a7d9a-a1cad6ec33fa2a4ec4e4b1385b3e8bc6-1600933046-1600922246&remote=202.5.56.39
+#EXTINF:-1 group-title="Movies",Star Gold 🇮🇳
+http://103.211.185.98:8082/75/index.m3u8?token=
+#EXTINF:-1 group-title="Entertainment",Star Plus 🇮🇳
+http://103.211.185.98:8082/67/index.m3u8?token=beeb59e94bfe6a048c4203fd2ce8a1272025a71c-ead0f51b6b43e3942e964d2d955c7df2-1600933574-1600922774&remote=202.5.56.39
+#EXTINF:-1 group-title="Entertainment",Sun Bangla 🇮🇳
+http://line.hi-ott.net:80/r3bel757978771tr4h/qFSpcLgHlGfIJCf/126098
+#EXTINF:-1 group-title="Entertainment",Zee Bangla 🇮🇳
+http://mhdtvworld.net:80/xyz/zee5m3u8.m3u8?c=https://z5ams.akamaized.net/zeebanglahd/index.m3u8
+#EXTINF:-1 group-title="Movies",Zee Bangla Cinema 🇮🇳
+http://z5amshls.akamaized.net/zbanglacnm/tracks-v1a1/index.m3u8
 #EXTINF:-1 tvg-id="DeshiTV.ca@SD" tvg-logo="https://i.imgur.com/PzqzgMm.png" group-title="General",Deshi TV (720p) 🇧🇩
 https://deshitv.deshitv24.net/live/myStream/playlist.m3u8
 #EXTINF:-1 tvg-id="DisneyInternationalHD.in@SD" tvg-logo="https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_DISNEY_INTERNATIONAL_HD/images/LOGO_HD/image.png" group-title="Kids",Disney International HD (1080p) 🇧🇩
 http://149.71.34.166:8002/play/a01p/index.m3u8
-#EXTINF:-1 tvg-id="DurontoTV.bd@SD" tvg-logo="https://i.imgur.com/gXsddRK.png" group-title="Kids",Duronto TV (720p) 🇧🇩
-#EXTVLCOPT:http-referrer=https://aynaott.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://tvsen5.aynaott.com/durontotv/index.m3u8
-#EXTINF:-1 tvg-id="EkattorTV.bd@SD" tvg-logo="https://i.imgur.com/zoLwwUK.png" group-title="News",Ekattor TV (1080p) 🇧🇩
-https://owrcovcrpy.gpcdn.net/bpk-tv/1705/output/1705.m3u8
 #EXTINF:-1 tvg-id="EkhonTV.bd@SD" tvg-logo="https://i.imgur.com/tRrDh6z.png" group-title="Business",Ekhon TV (1080p) 🇧🇩
 https://tplay.live/out/bangladesh/ekhontv.index.m3u8
-#EXTINF:-1 tvg-id="EkusheyTV.bd@SD" tvg-logo="https://i.imgur.com/lRpkGHj.png" group-title="News",Ekushey TV (720p) 🇧🇩
-#EXTVLCOPT:http-referrer=https://aynaott.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://tvsen6.aynaott.com/etv/index.m3u8
 #EXTINF:-1 tvg-id="GaziTV.bd@SD" tvg-logo="https://i.imgur.com/2Lzhiq6.png" group-title="General",Gazi TV (1080p) 🇧🇩
 http://tvn1.chowdhury-shaheb.com/gazitv/index.m3u8
-#EXTINF:-1 tvg-id="GlobalTelevision.bd@SD" tvg-logo="https://i.imgur.com/oe0pq1R.png" group-title="Entertainment;Music",Global TV (720p) 🇧🇩
-#EXTVLCOPT:http-referrer=https://aynaott.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://tvsen6.aynaott.com/globaltvhd/index.m3u8
-#EXTINF:-1 tvg-id="GreenTV.bd@SD" tvg-logo="https://www.jagobd.com/wp-content/uploads/2022/12/green-tv.jpg" group-title="Family",Green TV (1080p) 🇧🇩
-https://app.ncare.live/c3VydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI2/greentv.stream/live-orgin/greentv.stream/playlist.m3u8
-#EXTINF:-1 tvg-id="JamunaTV.bd@SD" tvg-logo="https://www.jamuna.tv/wp-content/themes/jtv-news/img/logo.png" group-title="News",Jamuna TV (1080p) 🇧🇩
-#EXTVLCOPT:http-referrer=https://bozztv.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://bozztv.com/rongo/rongo-JamunaTelevision/index.m3u8
-#EXTINF:-1 tvg-id="MaasrangaTV.bd@SD" tvg-logo="https://i.imgur.com/uVZJMed.png" group-title="Entertainment",Maasranga TV (1080p) 🇧🇩
-https://owrcovcrpy.gpcdn.net/bpk-tv/1722/output/index.m3u8
 #EXTINF:-1 tvg-id="MadaniChannelBangla.bd@SD" tvg-logo="https://i.imgur.com/vIJTVia.png" group-title="Religious",Madani Channel Bangla (1080p) 🇧🇩
 https://streaming.madanichannel.tv/static/streaming-playlists/hls/d3e49b76-ac06-4689-a641-9200445b647f/master.m3u8
-#EXTINF:-1 tvg-id="MohonaTV.bd@SD" tvg-logo="https://i.imgur.com/E6doEWH.png" group-title="General",Mohona TV (1080p) 🇧🇩
-#EXTVLCOPT:http-referrer=https://bozztv.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://bozztv.com/rongo/rongo-MohonaTV/index.m3u8
 #EXTINF:-1 tvg-id="MovieBangla.bd@SD" tvg-logo="https://www.jagobd.com/wp-content/uploads/2016/02/moviebangla.jpg?x50681" group-title="Movies",Movie Bangla 🇧🇩
 http://alvetv.com/moviebanglatv/8080/index.m3u8
-#EXTINF:-1 tvg-id="MyTV.bd@SD" tvg-logo="https://i.imgur.com/475qK5T.png" group-title="General",My TV (720p) 🇧🇩
-#EXTVLCOPT:http-referrer=https://aynaott.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://tvsen6.aynaott.com/mytv/index.m3u8
 #EXTINF:-1 tvg-id="NationalGeographic.in@HD" tvg-logo="https://dtil.tmsimg.com/assets/s143574_ld_h15_aa.png?lock=720x540" group-title="Documentary",National Geographic HD (576p) 🇧🇩
 http://149.71.34.166:8002/play/a013/index.m3u8
 #EXTINF:-1 tvg-id="NationalGeographicWild.in@HD" tvg-logo="https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_NAT_GEO_WILD/images/LOGO_HD/image.png" group-title="Documentary",National Geographic Wild HD (1080p) 🇧🇩
 http://149.71.34.166:8002/play/a012/index.m3u8
 #EXTINF:-1 tvg-id="Nickelodeon.in@SD" tvg-logo="https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_NICK/images/LOGO_HD/image.png" group-title="Kids",Nickelodeon (576p) 🇧🇩
 http://149.71.34.166:8000/play/a00u/index.m3u8
-#EXTINF:-1 tvg-id="NTV.bd@SD" tvg-logo="https://i.imgur.com/l75bDTx.png" group-title="General",NTV (1080p) 🇧🇩
-https://owrcovcrpy.gpcdn.net/bpk-tv/1716/output/index.m3u8
 #EXTINF:-1 tvg-id="PeaceTVBangla.ae@SD" tvg-logo="https://i.imgur.com/1ztVXUi.png" group-title="Religious",Peace TV Bangla (1080p) 🇧🇩
 https://dzkyvlfyge.erbvr.com/PeaceTvBangla/index.m3u8
 #EXTINF:-1 tvg-id="ProbashiTVNews.ca@SD" tvg-logo="https://i.imgur.com/7oTsfQ4.png" group-title="News",Probashi TV News (1080p) 🇧🇩
 http://158.69.24.53:8080/probashi_tv/index.m3u8
-#EXTINF:-1 tvg-id="RTV.bd@SD" tvg-logo="https://i.imgur.com/yu8ugqt.png" group-title="General",RTV (1080p) 🇧🇩
-#EXTVLCOPT:http-referrer=https://bozztv.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://bozztv.com/rongo/rongo-RTV/index.m3u8
-#EXTINF:-1 tvg-id="SATV.bd@SD" tvg-logo="https://i.imgur.com/tL9kxxB.png" group-title="General",SA TV (720p) 🇧🇩
-#EXTVLCOPT:http-referrer=https://aynaott.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://tvsen6.aynaott.com/satv/index.m3u8
-#EXTINF:-1 tvg-id="SangsadTV.bd@SD" tvg-logo="https://i.imgur.com/jkouxLg.png" group-title="Legislative",Sangsad TV (1080p) 🇧🇩
-#EXTVLCOPT:http-referrer=https://bozztv.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://bozztv.com/rongo/rongo-SangsadTV/index.m3u8
-#EXTINF:-1 tvg-id="StarNews.bd@SD" tvg-logo="https://upload.wikimedia.org/wikipedia/en/thumb/d/d5/Star_News_Bangladesh_Logo.svg/1280px-Star_News_Bangladesh_Logo.svg.png" group-title="Undefined",Star News (1080p) 🇧🇩
-https://owrcovcrpy.gpcdn.net/bpk-tv/1710/output/index.m3u8
-#EXTINF:-1 tvg-id="TSports.bd@SD" tvg-logo="https://i.imgur.com/2JzlorD.png" group-title="Sports",T Sports (720p) 🇧🇩
-#EXTVLCOPT:http-referrer=https://aynaott.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://tvsen7.aynaott.com/tsports-hd/index.m3u8
-#EXTINF:-1 tvg-id="TSports.bd@SD" tvg-logo="https://i.imgur.com/2JzlorD.png" group-title="Sports",T Sports (Mirror 2) 🇧🇩
-#EXTVLCOPT:http-referrer=https://aynaott.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://tvsen5.aynaott.com/tsports-hd/index.m3u8
-#EXTINF:-1 tvg-id="TSports.bd@SD" tvg-logo="https://i.imgur.com/2JzlorD.png" group-title="Sports",T Sports (Mirror 3) 🇧🇩
-#EXTVLCOPT:http-referrer=https://aynaott.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://tvsen6.aynaott.com/tsports-hd/index.m3u8
 #EXTINF:-1 tvg-id="GTV.bd@SD" tvg-logo="https://i.imgur.com/2Lzhiq6.png" group-title="Sports",Gazi TV / GTV Sports (1080p) 🇧🇩
 http://tvn1.chowdhury-shaheb.com/gazitv/index.m3u8
 #EXTINF:-1 tvg-id="VoktaTV.bd@SD" tvg-logo="https://i.imgur.com/szAGBCU.png" group-title="General",Vokta TV (720p) 🇧🇩
@@ -537,10 +552,6 @@ https://tplay.live/originals/ilm-tv/index.m3u8
 http://go8knm.optikl.ink/X/index.php/Besyria2/video.m3u8
 #EXTINF:-1 group-title="Entertainment",Motor Vision
 https://mvg-mv-xumo.otteravision.com/mvg/mv/mv.m3u8
-#EXTINF:-1 group-title="Entertainment",G Series Drama 🇧🇩
-#EXTVLCOPT:http-referrer=https://aynaott.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://vods2.aynaott.com/gseriesDrama/tracks-v1a1/mono.ts.m3u8
 #EXTINF:-1 group-title="Religious",Live Quran TV
 https://live.kwikmotion.com/sharjahtvquranlive/shqurantv.smil/playlist.m3u8
 #EXTINF:-1 group-title="Music",Spice FM Radio 🇧🇩
@@ -559,14 +570,6 @@ http://m.live.net.sa:1935/live/quran/playlist.m3u8
 http://m.live.net.sa:1935/live/sunnah/chunklist.m3u8?v=1
 #EXTINF:-1 group-title="Kids",PBS Kids
 https://2-fss-2.streamhoster.com/pl_140/amlst:200914-1298290/playlist.m3u8
-#EXTINF:-1 group-title="Kids",Cartoon Network
-#EXTVLCOPT:http-referrer=https://bozztv.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://live20.bozztv.com/giatvplayout7/giatv-209624/index.m3u8
-#EXTINF:-1 group-title="Kids",BBC Cbeebies
-#EXTVLCOPT:http-referrer=https://bozztv.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://live20.bozztv.com/giatvplayout7/giatv-209622/index.m3u8
 #EXTINF:-1 group-title="Music",9XM TV 🇮🇳
 https://wiselp.wiseplayout.com/9XM/HD1080/HD1080.m3u8
 #EXTINF:-1 group-title="Sports",Bein Sports 1
@@ -649,28 +652,12 @@ https://dwamdstream102.akamaized.net/hls/live/2015525/dwstream102/index.m3u8?v=1
 http://66.45.232.131:9994/;stream.mp3
 #EXTINF:-1 group-title="News",Press TV Iran
 https://live.presstv.ir/hls/presstv_5_482/index.m3u8
-#EXTINF:-1 group-title="Kids",Gopal Bhar TV 🇮🇳
-#EXTVLCOPT:http-referrer=https://bozztv.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://live20.bozztv.com/giatvplayout7/giatv-209611/tracks-v1a1/mono.ts.m3u8
 #EXTINF:-1 group-title="News",TRT World 🇹🇷
 https://tv-trtworld.medya.trt.com.tr/master.m3u8
 #EXTINF:-1 group-title="Religious",Arihant TV 🇮🇳
 https://aasthaott.akamaized.net/110923/smil:arihant.smil/chunklist_b1928000.m3u8
-#EXTINF:-1 group-title="Kids",Doraemon TV
-#EXTVLCOPT:http-referrer=https://bozztv.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://live20.bozztv.com/giatvplayout7/giatv-209902/tracks-v1a1/mono.ts.m3u8
-#EXTINF:-1 group-title="Kids",Tom & Jerry TV
-#EXTVLCOPT:http-referrer=https://bozztv.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://live20.bozztv.com/giatvplayout7/giatv-208314/tracks-v1a1/mono.ts.m3u8
 #EXTINF:-1 group-title="Music",Dhoom Music 🇮🇳
 http://103.175.73.12:8080/live/378/378_0.m3u8
-#EXTINF:-1 group-title="Kids",Motu Patlu
-#EXTVLCOPT:http-referrer=https://bozztv.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://live20.bozztv.com/giatvplayout7/giatv-209622/tracks-v1a1/mono.ts.m3u8
 #EXTINF:-1 group-title="News",NDTV 24x7 🇮🇳
 https://ndtv24x7elemarchana.akamaized.net/hls/live/2003678-b/ndtv24x7/master.m3u8
 #EXTINF:-1 group-title="Entertainment",R Plus Gold 🇮🇳
@@ -693,14 +680,6 @@ https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg00864-shemarooenterta-shemabollywoo
 https://thelegitpro.in/pntv/rplusnews24x7/tracks-v1a1/mono.m3u8
 #EXTINF:-1 group-title="News",NDTV Hindi 🇮🇳
 https://ndtvindiaelemarchana.akamaized.net/hls/live/2003679/ndtvindia/master.m3u8
-#EXTINF:-1 group-title="Kids",Tom & Jerry (Alt)
-#EXTVLCOPT:http-referrer=https://bozztv.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://live20.bozztv.com/giatvplayout7/giatv-208314/playlist.m3u8
-#EXTINF:-1 group-title="Movies",Hindi Movies 3
-#EXTVLCOPT:http-referrer=https://aynaott.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://vods2.aynaott.com/hindimovies/index.m3u8
 #EXTINF:-1 group-title="Movies",Goldmines Bollywood 🇮🇳
 http://103.175.73.12:8080/live/52/52_0.m3u8
 #EXTINF:-1 group-title="Sports",Star Sports 1 HD 🇮🇳
@@ -755,8 +734,6 @@ http://103.225.94.27/Infobase/hdd-3/hindi/Mardaani%203%20(2026)%201080p%20DVDRip
 http://103.225.94.27/Infobase/hdd-3/Hindi%20Dub/Test%20(2025)%201080p%20WEBDL.mp4
 #EXTINF:-1 group-title="Entertainment",Cowboy TV
 https://amg17292-amg17292c1-distrotv-us-4170.playouts.now.amagi.tv/playlist/amg17292-tetonridgellc-tetonridgefast-distrotvus/playlist.m3u8
-#EXTINF:-1 group-title="News",Desh TV 🇧🇩
-https://app24.jagobd.com.bd/c3VydmVyX8RpbEU9Mi8xNy8yMFDEEHGcfRgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcEdsEfeDeKiNkVN3PTOmdFseWRtaW51aiPhnPTI2/deshtv.stream/tracks-v1/mono.m3u8
 #EXTINF:-1 group-title="Music",YRF Music HD 🇮🇳
 https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg01412-xiaomiasia-yrfmusic-xiaomi/playlist.m3u8
 #EXTINF:-1 group-title="Entertainment",R Plus Gold (Alt) 🇮🇳
@@ -771,11 +748,3 @@ http://maxotts.maxdigitaltv.com/x-media/C111/master.m3u8
 https://1nyaler.streamhostingcdn.top/stream/33/index.m3u8
 #EXTINF:-1 group-title="Sports",Live Sports 3
 https://1nyaler.streamhostingcdn.top/stream/30/index.m3u8
-#EXTINF:-1 group-title="Movies",Hindi Movies
-#EXTVLCOPT:http-referrer=https://bozztv.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://live20.bozztv.com/giatvplayout7/giatv-209612/tracks-v1a1/mono.ts.m3u8
-#EXTINF:-1 group-title="Movies",South Movies
-#EXTVLCOPT:http-referrer=https://bozztv.com/
-#EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://live20.bozztv.com/giatvplayout7/giatv-209593/tracks-v1a1/mono.ts.m3u8

@@ -75,8 +75,6 @@ http://149.71.34.166:8002/play/a012/index.m3u8
 http://149.71.34.166:8000/play/a00u/index.m3u8
 #EXTINF:-1 tvg-id="PeaceTVBangla.ae@SD" tvg-logo="https://i.imgur.com/1ztVXUi.png" group-title="Religious",Peace TV Bangla (1080p) 🇧🇩
 https://dzkyvlfyge.erbvr.com/PeaceTvBangla/index.m3u8
-#EXTINF:-1 tvg-id="ProbashiTVNews.ca@SD" tvg-logo="https://i.imgur.com/7oTsfQ4.png" group-title="News",Probashi TV News (1080p) 🇧🇩
-http://158.69.24.53:8080/probashi_tv/index.m3u8
 #EXTINF:-1 tvg-id="GTV.bd@SD" tvg-logo="https://i.imgur.com/2Lzhiq6.png" group-title="Sports",Gazi TV / GTV Sports (1080p) 🇧🇩
 http://tvn1.chowdhury-shaheb.com/gazitv/index.m3u8
 #EXTINF:-1 tvg-id="VoktaTV.bd@SD" tvg-logo="https://i.imgur.com/szAGBCU.png" group-title="General",Vokta TV (720p) 🇧🇩
@@ -115,24 +113,10 @@ http://181.191.141.7/Live/51334cbb88db0e050c59ef2d28c53491/local-fox1ar_720.m3u8
 http://181.191.141.7/Live/51334cbb88db0e050c59ef2d28c53491/local-fox2ar.playlist.m3u8
 #EXTINF:-1 ,win
 http://8.243.126.131:8000/play/a025/index.m3u8
-#EXTINF:-1 ,Win Sports
-http://181.78.17.52:8000/play/a0pw/index.m3u8
 #EXTINF:-1 ,WIN SPORTS
 http://181.78.71.71:18000/play/a03p/index.m3u8
-#EXTINF:-1 ,win+
-http://190.60.37.154:45000/play/a00q/index.m3u8
 #EXTINF:-1 ,DSPORTS 1 🇦🇷
 http://190.117.20.37:8000/play/a08d/index.m3u8
-#EXTINF:-1 ,espn premium
-http://205.235.6.29:8000/play/a0pz/index.m3u8
-#EXTINF:-1 ,tnt sport
-http://205.235.6.29:8000/play/a0xa/index.m3u8
-#EXTINF:-1 ,tnt sport premium
-http://205.235.6.29:8000/play/a104/index.m3u8
-#EXTINF:-1 ,espn
-http://205.235.6.29:8000/play/a0zf/index.m3u8
-#EXTINF:-1 ,espn 7
-http://205.235.6.29:8000/play/a0zv/index.m3u8
 #EXTINF:-1 ,DSports
 http://38.226.210.46:8000/play/A008/index.m3u8
 #EXTINF:-1 ,dsport
@@ -229,8 +213,6 @@ http://cdntv.online/low/9mlxywika2/1021.m3u8
 http://cdntv.online/low/9mlxywika2/1022.m3u8
 #EXTINF:-1 ,Матч! 🇷🇺
 http://tv.tuva.ru/machtv/index.m3u8
-#EXTINF:-1 ,Матч! 🇷🇺
-http://185.46.48.18:80/match/tracks-v1a1/mono.m3u8
 #EXTINF:-1 ,Матч! 🇷🇺
 http://5.188.221.43:8080/play/match
 #EXTINF:-1 ,Матч! 🇷🇺
@@ -343,8 +325,6 @@ http://200.10.30.241:8000/play/a01r/index.m3u8
 http://45.5.118.152:8000/play/a0ah/index.m3u8
 #EXTINF:-1 ,Movistar Deportes
 http://38.226.210.46:8000/play/a06d/index.m3u8
-#EXTINF:-1 ,Tigo Sports
-http://181.78.17.52:8000/play/a0rq/index.m3u8
 #EXTINF:-1 ,Via X Sport
 http://38.226.49.253:8000/play/a042/index.m3u8
 #EXTINF:-1 ,Golf Channel
@@ -477,8 +457,6 @@ http://84.17.50.102/fox/index.m3u8
 http://rgkkw.live/live/1Aoen7elp5/IgMJ60tmAa/130714.ts
 #EXTINF:-1 group-title="Religious",WAZ TV 🇧🇩
 https://tplay.live/originals/ilm-tv/index.m3u8
-#EXTINF:-1 group-title="Entertainment",Max1
-http://go8knm.optikl.ink/X/index.php/Besyria2/video.m3u8
 #EXTINF:-1 group-title="Entertainment",Motor Vision
 https://mvg-mv-xumo.otteravision.com/mvg/mv/mv.m3u8
 #EXTINF:-1 group-title="Religious",Live Quran TV
@@ -539,8 +517,6 @@ https://jmc-live.ercdn.net/alistiqama/alistiqama.m3u8
 https://ua.online24.pm/play/1103/350B326FB34F4B8/video.m3u8
 #EXTINF:-1 group-title="Religious",Al Qamar
 https://streamer3.premio.link/alqamar/playlist.m3u8
-#EXTINF:-1 group-title="Kids",ZB Cartoon 🇧🇩
-https://server.zillarbarta.com/zbcatun/video.m3u8
 #EXTINF:-1 group-title="Entertainment",PCV
 https://padmaonline.duckdns.org:8088/pcv/index.m3u8
 #EXTINF:-1 group-title="News",DW News
@@ -671,8 +647,6 @@ https://cdn-4.pishow.tv/live/1231/1231_2.m3u8
 http://119.156.228.231:9983/stream/channelid/679185749?ticket=DED82FB8AE85893524A1035AAE7CD187020FFA04&profile=pass
 #EXTINF:-1 group-title="Entertainment",MK Six
 https://cdn-3.pishow.tv/live/1253/master.m3u8
-#EXTINF:-1 group-title="Movies",Sony Max 2 🇮🇳
-http://maxotts.maxdigitaltv.com/x-media/C111/master.m3u8
 #EXTINF:-1 group-title="Sports",Live Sports 6
 https://1nyaler.streamhostingcdn.top/stream/33/index.m3u8
 #EXTINF:-1 group-title="Sports",Live Sports 3
